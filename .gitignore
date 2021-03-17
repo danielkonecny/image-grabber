@@ -1,3 +1,14 @@
+# Project files
+
+# CMake
+CMakeFiles/
+Makefile
+CMakeCache.txt
+cmake_install.cmake
+
+# Binary files
+ImageGrabber
+
 # Prerequisites
 *.d
 

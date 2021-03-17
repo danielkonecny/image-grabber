@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+project(ImageGrabber)
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(/opt/pylon/include)
+link_directories(/opt/pylon/lib)
+add_executable(ImageGrabber main.cpp ImageGrabber.cpp CSampleImageEventHandler.cpp)
+target_link_libraries(ImageGrabber ${OpenCV_LIBS} pylonutility pylonbase GCBase_gcc_v3_1_Basler_pylon GenApi_gcc_v3_1_Basler_pylon)

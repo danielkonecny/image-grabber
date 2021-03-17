@@ -1,2 +1,6 @@
-# image-grabber
-App for grabing images from Basler Cameras.
+# How to launch
+
+In the project root folder:
+1. cmake .
+2. make
+3. ./ImageGrabber
