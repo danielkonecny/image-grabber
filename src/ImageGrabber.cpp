@@ -1,10 +1,21 @@
+/**
+ * Image Grabber
+ * Application for grabbing images from Basler cameras using Pylon API.
+ * @file            ImageGrabber.cpp
+ * @version         1.0
+ * @author          Daniel Konecny (xkonec75)
+ * @organisation    Brno University of Technology - Faculty of Information Technologies
+ * @date            02. 04. 2021
+ */
+
 #include <iostream>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <pylon/BaslerUniversalInstantCameraArray.h>
 
 #include "ImageGrabber.h"
-#include "CSampleImageEventHandler.h"
+#include "ImageEventHandler.h"
+#include "ConfigurationEventPrinter.h"
 
 using namespace std;
 using namespace Pylon;
@@ -32,10 +43,14 @@ ImageGrabber::ImageGrabber () {
 	    cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
 
 	    // Register an image event handler that accesses the chunk data.
-	    cameras[cameraIndex].RegisterImageEventHandler(
-	        new CSampleImageEventHandler, RegistrationMode_Append, Cleanup_Delete);
 	    cameras[cameraIndex].RegisterConfiguration(
 	        new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
+
+        cameras[cameraIndex].RegisterConfiguration(
+            new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
+
+	    cameras[cameraIndex].RegisterImageEventHandler(
+	        new ImageEventHandler, RegistrationMode_Append, Cleanup_Delete);
 
 	    // Open the camera.
 	    cameras[cameraIndex].Open();
