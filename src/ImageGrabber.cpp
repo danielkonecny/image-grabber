@@ -68,37 +68,34 @@ ImageGrabber::ImageGrabber () {
 void ImageGrabber::Grab () {
     size_t maxImagesToTake = 50;
 
-    cameras.StartGrabbing();
+    cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 
     for (size_t imageIndex = 0; imageIndex < maxImagesToTake && cameras.IsGrabbing(); imageIndex++) {
+        for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
+            if (cameras[cameraIndex].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
+                cameras[cameraIndex].ExecuteSoftwareTrigger();
+            }
+        }
+        WaitObject::Sleep(10);
+
+        /*
     	// One possible sequential implementation of capturing images from two cameras.
         if (cameraCount == 2) {
-            cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException);
-            cameras[1].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException);
-            cameras[0].ExecuteSoftwareTrigger();
-            cameras[1].ExecuteSoftwareTrigger();
-            cameras.RetrieveResult(5000, ptrGrabResult);
-            cameras.RetrieveResult(5000, ptrGrabResult);
+            if (cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
+                cameras[0].ExecuteSoftwareTrigger();
+            }
+            if (cameras[1].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
+                cameras[1].ExecuteSoftwareTrigger();
+            }
         }
         else if (cameraCount == 1) {
-            cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException);
-            cameras[0].ExecuteSoftwareTrigger();
-            cameras.RetrieveResult(5000, ptrGrabResult);
+            if (cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
+                cameras[0].ExecuteSoftwareTrigger();
+            }
         }
         else {
             cerr << "Camera count " << cameraCount << " is not implemented." << endl;
         }
-
-        /*
-        // Implementation of the same process just for any number of cameras, might be slower.
-        for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++)
-            cameras[cameraIndex].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException);
-
-        for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++)
-            cameras[cameraIndex].ExecuteSoftwareTrigger();
-
-        for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++)
-            cameras.RetrieveResult(5000, ptrGrabResult);
         */
     }
 }
