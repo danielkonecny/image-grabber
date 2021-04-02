@@ -1,3 +1,13 @@
+/**
+ * Image Grabber
+ * Application for grabbing images from Basler cameras using Pylon API.
+ * @file            ImageEventHandler.cpp
+ * @version         1.0
+ * @author          Daniel Konecny (xkonec75)
+ * @organisation    Brno University of Technology - Faculty of Information Technologies
+ * @date            02. 04. 2021
+ */ 
+
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -7,14 +17,14 @@
 #include <pylon/BaslerUniversalInstantCameraArray.h>
 #include <opencv2/opencv.hpp>
 
-#include "CSampleImageEventHandler.h"
+#include "ImageEventHandler.h"
 
 using namespace std;
 using namespace Pylon;
 using namespace cv;
 
 
-CSampleImageEventHandler::CSampleImageEventHandler () {
+ImageEventHandler::ImageEventHandler () {
     timestampFile.open("out/timestamps.csv");
     timestampFile << "\"image_file\",\"timestamp_in_ms\",\"iso_datetime\"\n";
 
@@ -28,11 +38,11 @@ CSampleImageEventHandler::CSampleImageEventHandler () {
     timeOffset = 0;
 }
 
-CSampleImageEventHandler::~CSampleImageEventHandler () {
+ImageEventHandler::~ImageEventHandler () {
     timestampFile.close();
 }
 
-string CSampleImageEventHandler::NanosecondsToDatetime (unsigned long long int originalTime) {
+string ImageEventHandler::NanosecondsToDatetime (unsigned long long int originalTime) {
     unsigned long long int mimoseconds = originalTime % 1000;
     unsigned long long int rest = originalTime / 1000;
     unsigned long long int seconds = rest % 60;
@@ -48,7 +58,7 @@ string CSampleImageEventHandler::NanosecondsToDatetime (unsigned long long int o
     return datetimeStream.str();
 }
 
-void CSampleImageEventHandler::OnImageGrabbed (
+void ImageEventHandler::OnImageGrabbed (
     CBaslerUniversalInstantCamera& camera,
     const CBaslerUniversalGrabResultPtr& ptrGrabResult) {
 
