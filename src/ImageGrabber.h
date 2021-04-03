@@ -13,6 +13,8 @@
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <pylon/BaslerUniversalInstantCameraArray.h>
 
+#include "ArgumentsParser.h"
+
 using namespace std;
 using namespace Pylon;
 using namespace GenApi;
@@ -25,8 +27,8 @@ public:
 	CBaslerUniversalInstantCameraArray cameras;
 	CBaslerUniversalGrabResultPtr ptrGrabResult;
 	
-    ImageGrabber ();
+    ImageGrabber (ArgumentsParser parser);
     
-    void Grab ();
+    void Grab (ArgumentsParser parser);
 };
 

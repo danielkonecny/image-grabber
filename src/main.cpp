@@ -17,28 +17,35 @@
 using namespace std;
 
 
-int main ( int /*argc*/, char* /*argv*/[] ) {
+int main (int argc, char* argv[]) {
     int exitCode = 0;
 
-    PylonInitialize();
+    ArgumentsParser parser;
 
-    try {
-        ImageGrabber imageGrabber;
+    if (parser.ProcessArguments(argc, argv)) {
+        PylonInitialize();
 
         try {
-            imageGrabber.Grab();
+            ImageGrabber imageGrabber(parser);
+
+            try {
+                imageGrabber.Grab(parser);
+            }
+            catch (const GenericException& e) {
+                cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
+                exitCode = 1;
+            }
         }
         catch (const GenericException& e) {
-            cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
+            cerr << "An exception occurred." << endl << e.GetDescription() << endl;
             exitCode = 1;
         }
+
+        PylonTerminate();
     }
-    catch (const GenericException& e) {
-        cerr << "An exception occurred." << endl << e.GetDescription() << endl;
+    else {
         exitCode = 1;
     }
-
-    PylonTerminate();
 
     return exitCode;
 }

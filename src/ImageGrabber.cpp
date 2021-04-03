@@ -9,6 +9,8 @@
  */
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <pylon/BaslerUniversalInstantCameraArray.h>
@@ -22,7 +24,7 @@ using namespace Pylon;
 using namespace GenApi;
 
 
-ImageGrabber::ImageGrabber () {
+ImageGrabber::ImageGrabber (ArgumentsParser parser) {
 	CTlFactory& tlFactory = CTlFactory::GetInstance();
 
 	// Get all attached devices and exit application if no device is found.
@@ -40,17 +42,19 @@ ImageGrabber::ImageGrabber () {
 	for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
 	    cameras[cameraIndex].Attach(tlFactory.CreateDevice(devices[cameraIndex]));
 
-	    cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
-
 	    // Register an image event handler that accesses the chunk data.
 	    cameras[cameraIndex].RegisterConfiguration(
 	        new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
 
-        cameras[cameraIndex].RegisterConfiguration(
-            new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
-
 	    cameras[cameraIndex].RegisterImageEventHandler(
 	        new ImageEventHandler, RegistrationMode_Append, Cleanup_Delete);
+
+        if (parser.IsVerbose()) {
+            cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
+
+            cameras[cameraIndex].RegisterConfiguration(
+                new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
+        }
 
 	    // Open the camera.
 	    cameras[cameraIndex].Open();
@@ -62,21 +66,23 @@ ImageGrabber::ImageGrabber () {
 	    // Enable time stamp chunks.
 	    cameras[cameraIndex].ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
 	    cameras[cameraIndex].ChunkEnable.SetValue(true);
+
+        cout << cameras[cameraIndex].ResultingFrameRate.GetValue() << endl;
 	}
 }
 
-void ImageGrabber::Grab () {
-    size_t maxImagesToTake = 50;
+void ImageGrabber::Grab (ArgumentsParser parser) {
+    size_t imagesToTake = parser.GetImageCount();
 
     cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 
-    for (size_t imageIndex = 0; imageIndex < maxImagesToTake && cameras.IsGrabbing(); imageIndex++) {
+    while (cameras.IsGrabbing()) {
         for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
-            if (cameras[cameraIndex].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
-                cameras[cameraIndex].ExecuteSoftwareTrigger();
-            }
+            cameras[cameraIndex].WaitForFrameTriggerReady(100, TimeoutHandling_ThrowException);
+            cameras[cameraIndex].ExecuteSoftwareTrigger();
         }
-        WaitObject::Sleep(10);
+        this_thread::sleep_for(chrono::milliseconds(10));
+        
 
         /*
     	// One possible sequential implementation of capturing images from two cameras.
