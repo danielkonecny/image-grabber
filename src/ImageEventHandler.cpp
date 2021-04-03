@@ -24,7 +24,7 @@ using namespace Pylon;
 using namespace cv;
 
 
-ImageEventHandler::ImageEventHandler () {
+ImageEventHandler::ImageEventHandler (bool inputVerbose) {
     timestampFile.open("out/timestamps.csv");
     timestampFile << "\"image_file\",\"timestamp_in_ms\",\"iso_datetime\"\n";
 
@@ -36,6 +36,8 @@ ImageEventHandler::ImageEventHandler () {
     formatConverter.OutputPixelFormat = PixelType_BGR8packed;
     
     timeOffset = 0;
+
+    verbose = inputVerbose;
 }
 
 ImageEventHandler::~ImageEventHandler () {
@@ -92,10 +94,12 @@ void ImageEventHandler::OnImageGrabbed (
         // Write info to CSV file.
         timestampFile << "\"" << imgNameString << "\"," << timestamp
                       << ",\"" << datetimeString << "\"\n";
-        cout << "Grabbed image " << imgNameString << " at " << datetimeString << endl;
+        if (verbose) {
+            cout << "Grabbed image " << imgNameString << " at " << datetimeString << endl;
+        }
     }
     else {
-        cout << "Error: " << std::hex << ptrGrabResult->GetErrorCode()
+        cerr << "Error: " << std::hex << ptrGrabResult->GetErrorCode()
              << std::dec << " " << ptrGrabResult->GetErrorDescription() << endl;
     }
 }

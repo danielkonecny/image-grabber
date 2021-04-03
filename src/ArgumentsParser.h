@@ -5,13 +5,13 @@
  * @version         1.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            02. 04. 2021
+ * @date            03. 04. 2021
  */
 
 class ArgumentsParser {
 private:
 	bool verbose = false;
-	unsigned long long int imageCount = 0;
+	unsigned long long int waitTime = 10;
 
 	void PrintHelp ();
 
@@ -22,5 +22,5 @@ public:
 
     bool IsVerbose();
 
-    unsigned long long int GetImageCount ();
+    unsigned long long int GetWaitTime ();
 };

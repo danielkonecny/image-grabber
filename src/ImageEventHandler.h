@@ -25,9 +25,10 @@ private:
     unsigned long long int timeOffset;
     CPylonImage imgPylon;
     CImageFormatConverter formatConverter;
+    bool verbose;
 
 public:
-    ImageEventHandler ();
+    ImageEventHandler (bool inputVerbose);
 
     ~ImageEventHandler ();
 

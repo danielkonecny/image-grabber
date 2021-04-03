@@ -5,7 +5,7 @@
  * @version         1.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            02. 04. 2021
+ * @date            03. 04. 2021
  */
 
 
@@ -41,20 +41,19 @@ long long ArgumentsParser::LoadNumber(char* numberAsChars) {
     return numberAsInt;
 }
 
-
 void ArgumentsParser::PrintHelp () {
-    cout << "-v (verbose)       Print information about the camera state." << endl << 
-            "-n (number)        Set number of images to be taken by each camera." << endl <<
+    cout << "IMAGE GRABBER" << endl <<
+            "-v (verbose)       Print information about the camera state." << endl << 
+            "-t (time)          Set time (in ms) between images grabbed." << endl <<
             "-h (help)          Show help." << endl;
 }
 
-
 bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
-    const char* const short_opts = "vn:h";
+    const char* const short_opts = "vt:h";
 
     const option long_opts[] = {
         {"verbose", no_argument, nullptr, 'v'},
-        {"number", required_argument, nullptr, 'n'},
+        {"time", required_argument, nullptr, 't'},
         {"help", no_argument, nullptr, 'h'},
         {nullptr, no_argument, nullptr, 0}
     };
@@ -71,9 +70,9 @@ bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
                 verbose = true;
                 break;
 
-            case 'n':
+            case 't':
                 try {
-                    imageCount = (unsigned long long)LoadNumber(optarg);
+                    waitTime = (unsigned long long)LoadNumber(optarg);
                 }
                 catch (...) {
                     return false;
@@ -95,7 +94,6 @@ bool ArgumentsParser::IsVerbose() {
     return verbose;
 }
 
-
-unsigned long long int ArgumentsParser::GetImageCount () {
-    return imageCount;
+unsigned long long int ArgumentsParser::GetWaitTime () {
+    return waitTime;
 }

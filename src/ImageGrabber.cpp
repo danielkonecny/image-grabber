@@ -2,10 +2,10 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ImageGrabber.cpp
- * @version         1.0
+ * @version         2.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            02. 04. 2021
+ * @date            03. 04. 2021
  */
 
 #include <iostream>
@@ -47,7 +47,7 @@ ImageGrabber::ImageGrabber (ArgumentsParser parser) {
 	        new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
 
 	    cameras[cameraIndex].RegisterImageEventHandler(
-	        new ImageEventHandler, RegistrationMode_Append, Cleanup_Delete);
+	        new ImageEventHandler(parser.IsVerbose()), RegistrationMode_Append, Cleanup_Delete);
 
         if (parser.IsVerbose()) {
             cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
@@ -66,13 +66,11 @@ ImageGrabber::ImageGrabber (ArgumentsParser parser) {
 	    // Enable time stamp chunks.
 	    cameras[cameraIndex].ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
 	    cameras[cameraIndex].ChunkEnable.SetValue(true);
-
-        cout << cameras[cameraIndex].ResultingFrameRate.GetValue() << endl;
 	}
 }
 
 void ImageGrabber::Grab (ArgumentsParser parser) {
-    size_t imagesToTake = parser.GetImageCount();
+    int waitTime = parser.GetWaitTime();
 
     cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 
@@ -81,28 +79,7 @@ void ImageGrabber::Grab (ArgumentsParser parser) {
             cameras[cameraIndex].WaitForFrameTriggerReady(100, TimeoutHandling_ThrowException);
             cameras[cameraIndex].ExecuteSoftwareTrigger();
         }
-        this_thread::sleep_for(chrono::milliseconds(10));
-        
-
-        /*
-    	// One possible sequential implementation of capturing images from two cameras.
-        if (cameraCount == 2) {
-            if (cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
-                cameras[0].ExecuteSoftwareTrigger();
-            }
-            if (cameras[1].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
-                cameras[1].ExecuteSoftwareTrigger();
-            }
-        }
-        else if (cameraCount == 1) {
-            if (cameras[0].WaitForFrameTriggerReady(1000, TimeoutHandling_ThrowException)) {
-                cameras[0].ExecuteSoftwareTrigger();
-            }
-        }
-        else {
-            cerr << "Camera count " << cameraCount << " is not implemented." << endl;
-        }
-        */
+        this_thread::sleep_for(chrono::milliseconds(waitTime));
     }
 }
 
