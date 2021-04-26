@@ -27,12 +27,18 @@ private:
     ofstream timestampFile;
     string dateString;
     unsigned long long int timeOffset;
-    unsigned long long int timeVidStart;
+    unsigned long long int timeGrabbingStarts;
+    string cameraSerialNum;
+
     CPylonImage imgPylon;
     CImageFormatConverter formatConverter;
+
+    VideoWriter vidOutput;
+
     bool verbose;
     bool image;
-    VideoWriter vidOutput;
+
+
 
 public:
     ~ImageEventHandler() override;

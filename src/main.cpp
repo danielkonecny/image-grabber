@@ -9,23 +9,27 @@
  */
 
 #include <iostream>
+#include <csignal>
 #include <pylon/PylonIncludes.h>
 
 #include "main.h"
 #include "ImageGrabber.h"
+#include "SignalHandler.h"
 
 using namespace std;
-
 
 int main(int argc, char *argv[]) {
     int exitCode = 0;
 
-    ArgumentsParser parser;
+    try {
+        signal(SIGINT, HandleExit);
+        signal(SIGTERM, HandleExit);
 
-    if (parser.ProcessArguments(argc, argv)) {
-        PylonInitialize();
+        ArgumentsParser parser;
 
-        try {
+        if (parser.ProcessArguments(argc, argv)) {
+            PylonInitialize();
+
             ImageGrabber imageGrabber(parser);
 
             try {
@@ -35,14 +39,18 @@ int main(int argc, char *argv[]) {
                 cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
                 exitCode = 1;
             }
-        }
-        catch (const GenericException &e) {
-            cerr << "An exception occurred." << endl << e.GetDescription() << endl;
+
+            PylonTerminate();
+        } else {
             exitCode = 1;
         }
-
-        PylonTerminate();
-    } else {
+    }
+    catch (const GenericException &e) {
+        cerr << "An exception occurred." << endl << e.GetDescription() << endl;
+        exitCode = 1;
+    }
+    catch (const user_exit &e) {
+        cout << "Closing." << endl;
         exitCode = 1;
     }
 

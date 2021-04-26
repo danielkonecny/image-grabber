@@ -11,5 +11,5 @@ add_executable(
 	src/ImageEventHandler.cpp
 	src/ConfigurationEventPrinter.cpp
 	src/ArgumentsParser.cpp
-)
+        src/SignalHandler.cpp src/SignalHandler.h)
 target_link_libraries(ImageGrabber ${OpenCV_LIBS} pylonutility pylonbase GCBase_gcc_v3_1_Basler_pylon GenApi_gcc_v3_1_Basler_pylon)

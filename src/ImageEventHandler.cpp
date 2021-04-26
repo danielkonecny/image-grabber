@@ -32,10 +32,7 @@ ImageEventHandler::~ImageEventHandler() {
 void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, ArgumentsParser parser) {
     verbose = parser.IsVerbose();
     image = parser.IsImage();
-
-    // Open file for logging grabbed images.
-    timestampFile.open("out/timestamps.csv");
-    timestampFile << "\"mode\",\"camera\",\"file_path\",\"timestamp_in_ms\",\"iso_datetime\"\n";
+    cameraSerialNum = static_cast<const char *>(camera.GetDeviceInfo().GetSerialNumber());
 
     // Get string representing current date.
     time_t date = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -46,6 +43,8 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
     formatConverter.OutputPixelFormat = PixelType_BGR8packed;
 
     INodeMap &nodeMap = camera.GetNodeMap();
+    CIntegerParameter width(nodeMap, "Width");
+    CIntegerParameter height(nodeMap, "Height");
 
     // Set time offset between camera and system time.
     unsigned long long int nowTime = std::chrono::duration_cast<std::chrono::nanoseconds>
@@ -53,31 +52,37 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
     CCommandParameter(nodeMap, "TimestampLatch").Execute();
     int64_t timestamp = CIntegerParameter(nodeMap, "TimestampLatchValue").GetValue();
     timeOffset = nowTime - timestamp;
-    timeVidStart = nowTime / 1000000;
+    timeGrabbingStarts = nowTime / 1000000;
 
-    if (verbose) {
-        cout << "Offset set to " << timeOffset << " ns." << endl;
-        if (image) {
-            cout << "Grabbing images in IMAGE MODE." << endl;
-        } else {
-            cout << "Grabbing images in VIDEO MODE" << endl;
-        }
-    }
+    // Open file for logging grabbed images.
+    ostringstream logNameStream;
+    logNameStream << "out/log/cam" << cameraSerialNum
+                  << "log" << std::to_string(timeGrabbingStarts) << ".csv";
+    string logNameString = logNameStream.str();
+    timestampFile.open(logNameString, std::fstream::out);
+    timestampFile << R"("mode","camera","file_path","timestamp_in_ms","iso_datetime")" << endl;
 
     // Open video output.
     if (!image) {
         ostringstream vidNameStream;
-        vidNameStream << "out/vid/cam" << camera.GetDeviceInfo().GetSerialNumber()
-                      << "vid" << std::to_string(timeVidStart) << ".avi";
+        vidNameStream << "out/vid/cam" << cameraSerialNum
+                      << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
         string vidNameString = vidNameStream.str();
-        CIntegerParameter width(nodeMap, "Width");
-        CIntegerParameter height(nodeMap, "Height");
         vidOutput.open(vidNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), 1,
                        Size((int) width.GetMax(), (int) height.GetMax()));
+    }
 
-        if (verbose) {
-            cout << "Video Resolution set to " << width.GetMax() << "x" << height.GetMax() << "." << endl;
+    if (verbose) {
+        cout << endl;
+        cout << "Camera " << cameraSerialNum << " settings:" << endl;
+        if (image) {
+            cout << "- Grabbing images in IMAGE MODE." << endl;
+        } else {
+            cout << "- Grabbing images in VIDEO MODE." << endl;
         }
+        cout << "- Resolution is " << width.GetMax() << "x" << height.GetMax() << "." << endl;
+        cout << "- Offset set to " << timeOffset << " ns." << endl;
+        cout << endl;
     }
 }
 
@@ -113,35 +118,32 @@ void ImageEventHandler::OnImageGrabbed(
         // Timestamp computation.
         unsigned long long int timestamp = ptrGrabResult->ChunkTimestamp.GetValue();
         timestamp = (timestamp + timeOffset) / 1000000;
-        cout << "Camera: " << camera.GetDeviceInfo().GetSerialNumber() << " has offset " << timeOffset <<
-        " and image was taken at " << timestamp << endl;
         string datetimeString = NanosecondsToDatetime(timestamp);
 
         if (image) {
             ostringstream imgNameStream;
-            imgNameStream << "out/img/cam" << camera.GetDeviceInfo().GetSerialNumber()
-                          << "img" << std::to_string(timestamp) << ".jpg";
+            imgNameStream << "out/img/cam" << cameraSerialNum << "img" << std::to_string(timestamp) << ".jpg";
             string imgNameString = imgNameStream.str();
 
             imwrite(imgNameString, imgMat);
 
-            timestampFile << "img," << camera.GetDeviceInfo().GetSerialNumber() << ",\"" << imgNameString << "\","
+            timestampFile << "\"img\"," << cameraSerialNum << ",\"" << imgNameString << "\","
                           << timestamp << ",\"" << datetimeString << "\"\n";
         } else {
             vidOutput.write(imgMat);
 
             ostringstream vidNameStream;
-            vidNameStream << "out/vid/cam" << camera.GetDeviceInfo().GetSerialNumber()
-                          << "vid" << std::to_string(timeVidStart) << ".avi";
+            vidNameStream << "out/vid/cam" << cameraSerialNum
+                          << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
             string vidNameString = vidNameStream.str();
 
-            timestampFile << "vid," << camera.GetDeviceInfo().GetSerialNumber() << ",\"" << vidNameString << "\","
+            timestampFile << "\"vid\"," << cameraSerialNum << ",\"" << vidNameString << "\","
                           << timestamp << ",\"" << datetimeString << "\"\n";
         }
         timestampFile.flush();
 
         if (verbose) {
-            cout << "Camera " << camera.GetDeviceInfo().GetSerialNumber() << " grabbed image at " <<
+            cout << "Camera " << cameraSerialNum << " grabbed image at " <<
                  datetimeString << " (" << std::to_string(timestamp) << " ms)." << endl;
         }
     } else {
