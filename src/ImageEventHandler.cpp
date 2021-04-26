@@ -113,6 +113,8 @@ void ImageEventHandler::OnImageGrabbed(
         // Timestamp computation.
         unsigned long long int timestamp = ptrGrabResult->ChunkTimestamp.GetValue();
         timestamp = (timestamp + timeOffset) / 1000000;
+        cout << "Camera: " << camera.GetDeviceInfo().GetSerialNumber() << " has offset " << timeOffset <<
+        " and image was taken at " << timestamp << endl;
         string datetimeString = NanosecondsToDatetime(timestamp);
 
         if (image) {
