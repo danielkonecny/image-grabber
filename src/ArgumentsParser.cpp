@@ -33,7 +33,7 @@ long long ArgumentsParser::LoadNumber(char* numberAsChars) {
         cerr << "Number out of range" << endl;
         throw;
     }
-    if (numberAsString.substr(length).compare("") != 0) {
+    if (!numberAsString.substr(length).empty()) {
         cerr << "Invalid number format" << endl;
         throw;
     }
@@ -90,10 +90,10 @@ bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
 }
 
 
-bool ArgumentsParser::IsVerbose() {
+bool ArgumentsParser::IsVerbose() const {
     return verbose;
 }
 
-unsigned long long int ArgumentsParser::GetWaitTime () {
+unsigned long long int ArgumentsParser::GetWaitTime () const {
     return waitTime;
 }

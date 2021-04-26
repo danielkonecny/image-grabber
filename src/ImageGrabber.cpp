@@ -13,7 +13,6 @@
 #include <thread>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
-#include <pylon/BaslerUniversalInstantCameraArray.h>
 
 #include "ImageGrabber.h"
 #include "ImageEventHandler.h"
@@ -70,7 +69,7 @@ ImageGrabber::ImageGrabber (ArgumentsParser parser) {
 }
 
 void ImageGrabber::Grab (ArgumentsParser parser) {
-    int waitTime = parser.GetWaitTime();
+    unsigned long long waitTime = parser.GetWaitTime();
 
     cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 

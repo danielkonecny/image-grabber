@@ -28,12 +28,12 @@ private:
     bool verbose;
 
 public:
-    ImageEventHandler (bool inputVerbose);
+    explicit ImageEventHandler (bool inputVerbose);
 
-    ~ImageEventHandler ();
+    ~ImageEventHandler () override;
 
     string NanosecondsToDatetime (unsigned long long int originalTime);
 
-    virtual void OnImageGrabbed (CBaslerUniversalInstantCamera& camera,
-                                const CBaslerUniversalGrabResultPtr& ptrGrabResult);
+    void OnImageGrabbed (CBaslerUniversalInstantCamera& camera,
+                                const CBaslerUniversalGrabResultPtr& ptrGrabResult) override;
 };

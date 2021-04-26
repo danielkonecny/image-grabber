@@ -9,12 +9,10 @@
  */ 
 
 #include <iostream>
-#include <fstream>
 #include <chrono>
 #include <ctime>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
-#include <pylon/BaslerUniversalInstantCameraArray.h>
 #include <opencv2/opencv.hpp>
 
 #include "ImageEventHandler.h"
@@ -45,7 +43,7 @@ ImageEventHandler::~ImageEventHandler () {
 }
 
 string ImageEventHandler::NanosecondsToDatetime (unsigned long long int originalTime) {
-    unsigned long long int mimoseconds = originalTime % 1000;
+    unsigned long long int milliseconds = originalTime % 1000;
     unsigned long long int rest = originalTime / 1000;
     unsigned long long int seconds = rest % 60;
     rest /= 60;
@@ -56,7 +54,7 @@ string ImageEventHandler::NanosecondsToDatetime (unsigned long long int original
     ostringstream datetimeStream;
     datetimeStream << dateString << std::setfill('0') << std::setw(2) << hours
                    << ":" << std::setw(2) << minutes << ":" << std::setw(2) << seconds
-                   << "." << std::setw(3) << mimoseconds;
+                   << "." << std::setw(3) << milliseconds;
     return datetimeStream.str();
 }
 
@@ -74,7 +72,9 @@ void ImageEventHandler::OnImageGrabbed (
             auto nowTime = std::chrono::duration_cast<std::chrono::nanoseconds>
                 (std::chrono::system_clock::now().time_since_epoch()).count();
             timeOffset = nowTime - timestamp;
-            //cout << "Offset set to " << timeOffset << " ns." << endl;
+            if (verbose) {
+                cout << "Offset set to " << timeOffset << " ns." << endl;
+            }
         }
         timestamp = (timestamp + timeOffset)/1000000;
 
@@ -87,7 +87,7 @@ void ImageEventHandler::OnImageGrabbed (
         
         // Convert and save image.
         formatConverter.Convert(imgPylon, ptrGrabResult);
-        Mat imgMat = Mat(ptrGrabResult->GetHeight(), ptrGrabResult->GetWidth(),
+        Mat imgMat = Mat((int)ptrGrabResult->GetHeight(), (int)ptrGrabResult->GetWidth(),
                               CV_8UC3, (uint8_t*)imgPylon.GetBuffer());
         imwrite(imgNameString, imgMat);
 

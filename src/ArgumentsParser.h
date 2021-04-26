@@ -13,14 +13,14 @@ private:
 	bool verbose = false;
 	unsigned long long int waitTime = 10;
 
-	void PrintHelp ();
+	static void PrintHelp ();
 
-	long long LoadNumber (char* numberAsChars);
+	static long long LoadNumber (char* numberAsChars);
 
 public:	
     bool ProcessArguments (int argc, char* argv[]);
 
-    bool IsVerbose();
+    bool IsVerbose() const;
 
-    unsigned long long int GetWaitTime ();
+    unsigned long long int GetWaitTime () const;
 };

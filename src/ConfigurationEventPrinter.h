@@ -16,35 +16,35 @@ using namespace Pylon;
 
 class ConfigurationEventPrinter : public CConfigurationEventHandler {
 public:
-    void OnAttach (CInstantCamera& /*camera*/);
+    void OnAttach (CInstantCamera& /*camera*/) override;
 
-    void OnAttached (CInstantCamera& camera);
+    void OnAttached (CInstantCamera& camera) override;
 
-    void OnOpen (CInstantCamera& camera);
+    void OnOpen (CInstantCamera& camera) override;
 
-    void OnOpened (CInstantCamera& camera);
+    void OnOpened (CInstantCamera& camera) override;
 
-    void OnGrabStart (CInstantCamera& camera);
+    void OnGrabStart (CInstantCamera& camera) override;
 
-    void OnGrabStarted (CInstantCamera& camera);
+    void OnGrabStarted (CInstantCamera& camera) override;
 
-    void OnGrabStop (CInstantCamera& camera);
+    void OnGrabStop (CInstantCamera& camera) override;
 
-    void OnGrabStopped (CInstantCamera& camera);
+    void OnGrabStopped (CInstantCamera& camera) override;
 
-    void OnClose (CInstantCamera& camera);
+    void OnClose (CInstantCamera& camera) override;
 
-    void OnClosed (CInstantCamera& camera);
+    void OnClosed (CInstantCamera& camera) override;
 
-    void OnDestroy (CInstantCamera& camera);
+    void OnDestroy (CInstantCamera& camera) override;
 
-    void OnDestroyed (CInstantCamera& /*camera*/);
+    void OnDestroyed (CInstantCamera& /*camera*/) override;
 
-    void OnDetach (CInstantCamera& camera);
+    void OnDetach (CInstantCamera& camera) override;
 
-    void OnDetached (CInstantCamera& camera);
+    void OnDetached (CInstantCamera& camera) override;
 
-    void OnGrabError (CInstantCamera& camera, const char* errorMessage);
+    void OnGrabError (CInstantCamera& camera, const char* errorMessage) override;
 
-    void OnCameraDeviceRemoved (CInstantCamera& camera);
+    void OnCameraDeviceRemoved (CInstantCamera& camera) override;
 };

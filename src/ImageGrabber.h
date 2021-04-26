@@ -25,9 +25,8 @@ private:
 
 public:
 	CBaslerUniversalInstantCameraArray cameras;
-	CBaslerUniversalGrabResultPtr ptrGrabResult;
 	
-    ImageGrabber (ArgumentsParser parser);
+    explicit ImageGrabber (ArgumentsParser parser);
     
     void Grab (ArgumentsParser parser);
 };
