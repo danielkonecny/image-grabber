@@ -35,12 +35,8 @@ int main(int argc, char *argv[]) {
             try {
                 imageGrabber.Grab(parser);
             }
-            catch (const runtime_error &e) {
-                cerr << "Could not grab an image." << endl;
-                exitCode = 1;
-            }
-            catch (...) {
-                cerr << "ERROR." << endl;
+            catch (const GenericException &e) {
+                cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
                 exitCode = 1;
             }
 
@@ -49,16 +45,12 @@ int main(int argc, char *argv[]) {
             exitCode = 1;
         }
     }
-    catch (const runtime_error &e) {
-        cerr << "Runtime exception occurred." << endl;
+    catch (const GenericException &e) {
+        cerr << "An exception occurred." << endl << e.GetDescription() << endl;
         exitCode = 1;
     }
     catch (const user_exit &e) {
         cout << "Closing." << endl;
-        exitCode = 1;
-    }
-    catch (...) {
-        cerr << "ERROR." << endl;
         exitCode = 1;
     }
 

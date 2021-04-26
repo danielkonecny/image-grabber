@@ -29,7 +29,7 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
     // Get all attached devices and exit application if no device is found.
     DeviceInfoList_t devices;
     if (tlFactory.EnumerateDevices(devices) == 0) {
-        throw runtime_error("No camera present.");
+        throw RUNTIME_EXCEPTION("No camera present."); // NOLINT(hicpp-exception-baseclass)
     }
 
     // Create an array of instant cameras for the found devices and avoid exceeding a maximum number of devices.
@@ -63,7 +63,7 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
 
         // Enable chunks in general.
         if (!cameras[cameraIndex].ChunkModeActive.TrySetValue(true))
-            throw runtime_error("The camera doesn't support chunk features");
+            throw RUNTIME_EXCEPTION("The camera doesn't support chunk features"); // NOLINT(hicpp-exception-baseclass)
 
         // Enable time stamp chunks.
         cameras[cameraIndex].ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
