@@ -12,14 +12,17 @@ using namespace std;
 
 #define DEFAULT_IMG_QUALITY 95
 #define DEFAULT_WAIT_TIME 10
+#define DEFAULT_OUT_DIR "out"
+#define DEFAULT_IMAGE false
+#define DEFAULT_VERBOSE false
 
 class ArgumentsParser {
 private:
-    bool image = false;
-    string outDir = "out";
+    bool image = DEFAULT_IMAGE;
+    string outDir = DEFAULT_OUT_DIR;
     int imgQuality = DEFAULT_IMG_QUALITY;
     unsigned long long int waitTime = DEFAULT_WAIT_TIME;
-    bool verbose = false;
+    bool verbose = DEFAULT_VERBOSE;
 
     static void PrintHelp();
 

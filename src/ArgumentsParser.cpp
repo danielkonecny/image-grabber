@@ -47,7 +47,7 @@ void ArgumentsParser::PrintHelp() {
          "                   Quality has to be between 0 and 100, the higher is the better (default: " <<
          DEFAULT_IMG_QUALITY << ")." << endl <<
          "                   Quality has to be written right after the option without space (e. g. -i42)." << endl <<
-         "-o (output)        Set folder for video/image and log output (default: out)." << endl <<
+         "-o (output)        Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
          "                   This folder has to contain folders: img, log, vid." << endl <<
          "-t (time)          Set time (in ms) between images grabbed (default: " << DEFAULT_WAIT_TIME << ")." << endl <<
          "-v (verbose)       Print information about the camera state." << endl;
