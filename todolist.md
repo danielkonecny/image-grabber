@@ -3,8 +3,8 @@
 1. ~~Oddělat ptrGrabResult.~~
 2. ~~Ukládání nahrávání jako video - [tutorial](https://learnopencv.
    com/read-write-and-display-a-video-using-opencv-cpp-python/). Defaultně ukládat video, ale možnost parametrem si 
-   nastavit ukládání obrázků,~~ navíc jako argument parametru možnost definovat kvalitu obrázků (třetí parametr v 
-   imwrite) (-i QUALITY).
+   nastavit ukládání obrázků, navíc jako argument parametru možnost definovat kvalitu obrázků (třetí parametr v 
+   imwrite) (-i QUALITY).~~
 3. ~~Možnost zvolit si parametrem jaká je output složka (-o).~~
 4. ~~Zapisování do souboru aby bylo threadsafe, možná bude třeba použití více souborů. Vyzkoušet `timestampFile.
    flush()` - zapsání bufferů, ale to možná nebude potřeba.~~

@@ -43,19 +43,22 @@ long long ArgumentsParser::LoadNumber(char *numberAsChars) {
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
          "-h (help)          Show help." << endl <<
-         "-i (image)         Save images instead of video." << endl <<
+         "-i (image)         Save images instead of video. Optional argument setting the image quality." << endl <<
+         "                   Quality has to be between 0 and 100, the higher is the better (default: " <<
+         DEFAULT_IMG_QUALITY << ")." << endl <<
+         "                   Quality has to be written right after the option without space (e. g. -i42)." << endl <<
          "-o (output)        Set folder for video/image and log output (default: out)." << endl <<
          "                   This folder has to contain folders: img, log, vid." << endl <<
-         "-t (time)          Set time (in ms) between images grabbed." << endl <<
+         "-t (time)          Set time (in ms) between images grabbed (default: " << DEFAULT_WAIT_TIME << ")." << endl <<
          "-v (verbose)       Print information about the camera state." << endl;
 }
 
 bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
-    const char *const short_opts = "hio:t:v";
+    const char *const short_opts = "hi::o:t:v";
 
     const option long_opts[] = {
             {"help",    no_argument,       nullptr, 'h'},
-            {"image",   no_argument,       nullptr, 'i'},
+            {"image",   optional_argument, nullptr, 'i'},
             {"output",  required_argument, nullptr, 'o'},
             {"time",    required_argument, nullptr, 't'},
             {"verbose", no_argument,       nullptr, 'v'},
@@ -76,6 +79,19 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
 
             case 'i':
                 image = true;
+                if (optarg) {
+                    try {
+                        imgQuality = (int) LoadNumber(optarg);
+                    }
+                    catch (...) {
+                        return false;
+                    }
+                    if (imgQuality < 0 || imgQuality > 100) {
+                        cerr << "ERROR: Image quality has to be between 0 and 100. Currently " << imgQuality <<
+                             ". Quality automatically set to default value " << DEFAULT_IMG_QUALITY << "." << endl;
+                        imgQuality = DEFAULT_IMG_QUALITY;
+                    }
+                }
                 break;
 
             case 'o':
@@ -112,6 +128,10 @@ bool ArgumentsParser::IsImage() const {
 
 string ArgumentsParser::GetOutDir() {
     return outDir;
+}
+
+int ArgumentsParser::GetImgQuality() {
+    return imgQuality;
 }
 
 unsigned long long int ArgumentsParser::GetWaitTime() const {

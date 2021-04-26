@@ -34,6 +34,7 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
     image = parser.IsImage();
     outDir = parser.GetOutDir();
     cameraSerialNum = static_cast<const char *>(camera.GetDeviceInfo().GetSerialNumber());
+    imgQuality = parser.GetImgQuality();
 
     // Get string representing current date.
     time_t date = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -126,7 +127,7 @@ void ImageEventHandler::OnImageGrabbed(
             imgNameStream << outDir << "/img/cam" << cameraSerialNum << "img" << std::to_string(timestamp) << ".jpg";
             string imgNameString = imgNameStream.str();
 
-            imwrite(imgNameString, imgMat);
+            imwrite(imgNameString, imgMat, vector<int>({IMWRITE_JPEG_QUALITY, imgQuality}));
 
             timestampFile << "\"img\"," << cameraSerialNum << ",\"" << imgNameString << "\","
                           << timestamp << ",\"" << datetimeString << "\"\n";

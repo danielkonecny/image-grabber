@@ -38,6 +38,7 @@ private:
     bool verbose;
     bool image;
     string outDir;
+    int imgQuality;
 
 public:
     ~ImageEventHandler() override;

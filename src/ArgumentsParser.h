@@ -10,11 +10,15 @@
 
 using namespace std;
 
+#define DEFAULT_IMG_QUALITY 95
+#define DEFAULT_WAIT_TIME 10
+
 class ArgumentsParser {
 private:
     bool image = false;
     string outDir = "out";
-    unsigned long long int waitTime = 10;
+    int imgQuality = DEFAULT_IMG_QUALITY;
+    unsigned long long int waitTime = DEFAULT_WAIT_TIME;
     bool verbose = false;
 
     static void PrintHelp();
@@ -29,6 +33,8 @@ public:
     bool IsImage() const;
 
     string GetOutDir();
+
+    int GetImgQuality();
 
     unsigned long long int GetWaitTime() const;
 };
