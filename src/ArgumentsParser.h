@@ -8,11 +8,14 @@
  * @date            03. 04. 2021
  */
 
+using namespace std;
+
 class ArgumentsParser {
 private:
-    bool verbose = false;
     bool image = false;
+    string outDir = "out";
     unsigned long long int waitTime = 10;
+    bool verbose = false;
 
     static void PrintHelp();
 
@@ -24,6 +27,8 @@ public:
     bool IsVerbose() const;
 
     bool IsImage() const;
+
+    string GetOutDir();
 
     unsigned long long int GetWaitTime() const;
 };

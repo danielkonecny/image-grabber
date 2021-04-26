@@ -16,7 +16,6 @@
 
 using namespace std;
 
-
 long long ArgumentsParser::LoadNumber(char *numberAsChars) {
     string::size_type length;
     string numberAsString = numberAsChars;
@@ -45,19 +44,22 @@ void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
          "-h (help)          Show help." << endl <<
          "-i (image)         Save images instead of video." << endl <<
+         "-o (output)        Set folder for video/image and log output (default: out)." << endl <<
+         "                   This folder has to contain folders: img, log, vid." << endl <<
          "-t (time)          Set time (in ms) between images grabbed." << endl <<
          "-v (verbose)       Print information about the camera state." << endl;
 }
 
 bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
-    const char *const short_opts = "hit:v";
+    const char *const short_opts = "hio:t:v";
 
     const option long_opts[] = {
-            {"help", no_argument, nullptr, 'h'},
-            {"image", no_argument, nullptr, 'i'},
-            {"time", required_argument, nullptr, 't'},
-            {"verbose", no_argument, nullptr, 'v'},
-            {nullptr, no_argument, nullptr, 0}
+            {"help",    no_argument,       nullptr, 'h'},
+            {"image",   no_argument,       nullptr, 'i'},
+            {"output",  required_argument, nullptr, 'o'},
+            {"time",    required_argument, nullptr, 't'},
+            {"verbose", no_argument,       nullptr, 'v'},
+            {nullptr,   no_argument,       nullptr, 0}
     };
 
     while (true) {
@@ -74,6 +76,10 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
 
             case 'i':
                 image = true;
+                break;
+
+            case 'o':
+                outDir = optarg;
                 break;
 
             case 't':
@@ -102,6 +108,10 @@ bool ArgumentsParser::IsVerbose() const {
 
 bool ArgumentsParser::IsImage() const {
     return image;
+}
+
+string ArgumentsParser::GetOutDir() {
+    return outDir;
 }
 
 unsigned long long int ArgumentsParser::GetWaitTime() const {

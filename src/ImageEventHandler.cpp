@@ -32,6 +32,7 @@ ImageEventHandler::~ImageEventHandler() {
 void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, ArgumentsParser parser) {
     verbose = parser.IsVerbose();
     image = parser.IsImage();
+    outDir = parser.GetOutDir();
     cameraSerialNum = static_cast<const char *>(camera.GetDeviceInfo().GetSerialNumber());
 
     // Get string representing current date.
@@ -56,7 +57,7 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
 
     // Open file for logging grabbed images.
     ostringstream logNameStream;
-    logNameStream << "out/log/cam" << cameraSerialNum
+    logNameStream << outDir << "/log/cam" << cameraSerialNum
                   << "log" << std::to_string(timeGrabbingStarts) << ".csv";
     string logNameString = logNameStream.str();
     timestampFile.open(logNameString, std::fstream::out);
@@ -65,7 +66,7 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
     // Open video output.
     if (!image) {
         ostringstream vidNameStream;
-        vidNameStream << "out/vid/cam" << cameraSerialNum
+        vidNameStream << outDir << "/vid/cam" << cameraSerialNum
                       << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
         string vidNameString = vidNameStream.str();
         vidOutput.open(vidNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), 1,
@@ -122,7 +123,7 @@ void ImageEventHandler::OnImageGrabbed(
 
         if (image) {
             ostringstream imgNameStream;
-            imgNameStream << "out/img/cam" << cameraSerialNum << "img" << std::to_string(timestamp) << ".jpg";
+            imgNameStream << outDir << "/img/cam" << cameraSerialNum << "img" << std::to_string(timestamp) << ".jpg";
             string imgNameString = imgNameStream.str();
 
             imwrite(imgNameString, imgMat);
@@ -133,7 +134,7 @@ void ImageEventHandler::OnImageGrabbed(
             vidOutput.write(imgMat);
 
             ostringstream vidNameStream;
-            vidNameStream << "out/vid/cam" << cameraSerialNum
+            vidNameStream << outDir << "/vid/cam" << cameraSerialNum
                           << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
             string vidNameString = vidNameStream.str();
 

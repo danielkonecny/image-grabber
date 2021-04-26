@@ -37,8 +37,7 @@ private:
 
     bool verbose;
     bool image;
-
-
+    string outDir;
 
 public:
     ~ImageEventHandler() override;

@@ -5,7 +5,7 @@
    com/read-write-and-display-a-video-using-opencv-cpp-python/). Defaultně ukládat video, ale možnost parametrem si 
    nastavit ukládání obrázků,~~ navíc jako argument parametru možnost definovat kvalitu obrázků (třetí parametr v 
    imwrite) (-i QUALITY).
-3. Možnost zvolit si parametrem jaká je output složka (-o).
+3. ~~Možnost zvolit si parametrem jaká je output složka (-o).~~
 4. ~~Zapisování do souboru aby bylo threadsafe, možná bude třeba použití více souborů. Vyzkoušet `timestampFile.
    flush()` - zapsání bufferů, ale to možná nebude potřeba.~~
 5. ~~Zjištění správného offsetu - systémový timestamp zjistit při volání software triggeru, uložit si ho jako property a spočítat s ním offset. Kdyby se nějak povedlo to vytáhnout už při inicializaci, bylo by to super, ale šance nejsou velké - [dokumentace](https://docs.baslerweb.com/timestamp).~~
