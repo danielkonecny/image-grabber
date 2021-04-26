@@ -6,14 +6,14 @@
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
  * @date            02. 04. 2021
- */ 
+ */
 
 #include <iostream>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <pylon/BaslerUniversalInstantCameraArray.h>
 
-#include "ArgumentsParser.h"
+#include "ImageEventHandler.h"
 
 using namespace std;
 using namespace Pylon;
@@ -21,13 +21,14 @@ using namespace GenApi;
 
 class ImageGrabber {
 private:
-	size_t cameraCount;
+    size_t cameraCount;
+    ImageEventHandler imageHandler;
 
 public:
-	CBaslerUniversalInstantCameraArray cameras;
-	
-    explicit ImageGrabber (ArgumentsParser parser);
-    
-    void Grab (ArgumentsParser parser);
+    CBaslerUniversalInstantCameraArray cameras;
+
+    explicit ImageGrabber(ArgumentsParser parser);
+
+    void Grab(ArgumentsParser parser);
 };
 

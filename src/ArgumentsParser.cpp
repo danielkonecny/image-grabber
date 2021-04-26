@@ -17,7 +17,7 @@
 using namespace std;
 
 
-long long ArgumentsParser::LoadNumber(char* numberAsChars) {
+long long ArgumentsParser::LoadNumber(char *numberAsChars) {
     string::size_type length;
     string numberAsString = numberAsChars;
     int numberAsInt;
@@ -41,21 +41,23 @@ long long ArgumentsParser::LoadNumber(char* numberAsChars) {
     return numberAsInt;
 }
 
-void ArgumentsParser::PrintHelp () {
+void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-            "-v (verbose)       Print information about the camera state." << endl << 
-            "-t (time)          Set time (in ms) between images grabbed." << endl <<
-            "-h (help)          Show help." << endl;
+         "-h (help)          Show help." << endl <<
+         "-i (image)         Save images instead of video." << endl <<
+         "-t (time)          Set time (in ms) between images grabbed." << endl <<
+         "-v (verbose)       Print information about the camera state." << endl;
 }
 
-bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
-    const char* const short_opts = "vt:h";
+bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
+    const char *const short_opts = "hit:v";
 
     const option long_opts[] = {
-        {"verbose", no_argument, nullptr, 'v'},
-        {"time", required_argument, nullptr, 't'},
-        {"help", no_argument, nullptr, 'h'},
-        {nullptr, no_argument, nullptr, 0}
+            {"help", no_argument, nullptr, 'h'},
+            {"image", no_argument, nullptr, 'i'},
+            {"time", required_argument, nullptr, 't'},
+            {"verbose", no_argument, nullptr, 'v'},
+            {nullptr, no_argument, nullptr, 0}
     };
 
     while (true) {
@@ -70,9 +72,13 @@ bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
                 verbose = true;
                 break;
 
+            case 'i':
+                image = true;
+                break;
+
             case 't':
                 try {
-                    waitTime = (unsigned long long)LoadNumber(optarg);
+                    waitTime = (unsigned long long) LoadNumber(optarg);
                 }
                 catch (...) {
                     return false;
@@ -86,7 +92,7 @@ bool ArgumentsParser::ProcessArguments (int argc, char* argv[]) {
                 return false;
         }
     }
-	return true;
+    return true;
 }
 
 
@@ -94,6 +100,10 @@ bool ArgumentsParser::IsVerbose() const {
     return verbose;
 }
 
-unsigned long long int ArgumentsParser::GetWaitTime () const {
+bool ArgumentsParser::IsImage() const {
+    return image;
+}
+
+unsigned long long int ArgumentsParser::GetWaitTime() const {
     return waitTime;
 }

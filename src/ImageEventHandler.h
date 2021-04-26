@@ -6,7 +6,7 @@
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
  * @date            02. 04. 2021
- */ 
+ */
 
 #include <iostream>
 #include <fstream>
@@ -14,26 +14,33 @@
 #include <ctime>
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <pylon/BaslerUniversalInstantCameraArray.h>
+#include <opencv2/opencv.hpp>
+
+#include "ArgumentsParser.h"
 
 using namespace std;
 using namespace Pylon;
+using namespace cv;
 
 class ImageEventHandler : public CBaslerUniversalImageEventHandler {
 private:
     ofstream timestampFile;
     string dateString;
     unsigned long long int timeOffset;
+    unsigned long long int timeVidStart;
     CPylonImage imgPylon;
     CImageFormatConverter formatConverter;
     bool verbose;
+    bool image;
+    VideoWriter vidOutput;
 
 public:
-    explicit ImageEventHandler (bool inputVerbose);
+    ~ImageEventHandler() override;
 
-    ~ImageEventHandler () override;
+    void Configure(CBaslerUniversalInstantCamera &camera, ArgumentsParser parser);
 
-    string NanosecondsToDatetime (unsigned long long int originalTime);
+    string NanosecondsToDatetime(unsigned long long int originalTime);
 
-    void OnImageGrabbed (CBaslerUniversalInstantCamera& camera,
-                                const CBaslerUniversalGrabResultPtr& ptrGrabResult) override;
+    void OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
+                        const CBaslerUniversalGrabResultPtr &ptrGrabResult) override;
 };

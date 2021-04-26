@@ -10,17 +10,20 @@
 
 class ArgumentsParser {
 private:
-	bool verbose = false;
-	unsigned long long int waitTime = 10;
+    bool verbose = false;
+    bool image = false;
+    unsigned long long int waitTime = 10;
 
-	static void PrintHelp ();
+    static void PrintHelp();
 
-	static long long LoadNumber (char* numberAsChars);
+    static long long LoadNumber(char *numberAsChars);
 
-public:	
-    bool ProcessArguments (int argc, char* argv[]);
+public:
+    bool ProcessArguments(int argc, char *argv[]);
 
     bool IsVerbose() const;
 
-    unsigned long long int GetWaitTime () const;
+    bool IsImage() const;
+
+    unsigned long long int GetWaitTime() const;
 };

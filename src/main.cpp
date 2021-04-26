@@ -6,7 +6,7 @@
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
  * @date            03. 04. 2021
- */ 
+ */
 
 #include <iostream>
 #include <pylon/PylonIncludes.h>
@@ -17,7 +17,7 @@
 using namespace std;
 
 
-int main (int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     int exitCode = 0;
 
     ArgumentsParser parser;
@@ -31,19 +31,18 @@ int main (int argc, char* argv[]) {
             try {
                 imageGrabber.Grab(parser);
             }
-            catch (const GenericException& e) {
+            catch (const GenericException &e) {
                 cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
                 exitCode = 1;
             }
         }
-        catch (const GenericException& e) {
+        catch (const GenericException &e) {
             cerr << "An exception occurred." << endl << e.GetDescription() << endl;
             exitCode = 1;
         }
 
         PylonTerminate();
-    }
-    else {
+    } else {
         exitCode = 1;
     }
 
