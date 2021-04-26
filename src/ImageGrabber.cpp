@@ -11,6 +11,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <stdexcept>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
 
@@ -22,13 +23,13 @@ using namespace Pylon;
 using namespace GenApi;
 
 
-ImageGrabber::ImageGrabber(ArgumentsParser parser) {
+ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
     CTlFactory &tlFactory = CTlFactory::GetInstance();
 
     // Get all attached devices and exit application if no device is found.
     DeviceInfoList_t devices;
     if (tlFactory.EnumerateDevices(devices) == 0) {
-        throw RUNTIME_EXCEPTION("No camera present.");
+        throw runtime_error("No camera present.");
     }
 
     // Create an array of instant cameras for the found devices and avoid exceeding a maximum number of devices.
@@ -45,7 +46,8 @@ ImageGrabber::ImageGrabber(ArgumentsParser parser) {
                 new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
 
         imageHandlers.push_back(new ImageEventHandler());
-        cameras[cameraIndex].RegisterImageEventHandler(imageHandlers[cameraIndex], RegistrationMode_Append, Cleanup_Delete);
+        cameras[cameraIndex].RegisterImageEventHandler(imageHandlers[cameraIndex], RegistrationMode_Append,
+                                                       Cleanup_Delete);
 
         if (parser.IsVerbose()) {
             cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
@@ -61,7 +63,7 @@ ImageGrabber::ImageGrabber(ArgumentsParser parser) {
 
         // Enable chunks in general.
         if (!cameras[cameraIndex].ChunkModeActive.TrySetValue(true))
-            throw RUNTIME_EXCEPTION("The camera doesn't support chunk features");
+            throw runtime_error("The camera doesn't support chunk features");
 
         // Enable time stamp chunks.
         cameras[cameraIndex].ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
@@ -69,7 +71,7 @@ ImageGrabber::ImageGrabber(ArgumentsParser parser) {
     }
 }
 
-void ImageGrabber::Grab(ArgumentsParser parser) {
+void ImageGrabber::Grab(const ArgumentsParser &parser) {
     unsigned long long waitTime = parser.GetWaitTime();
 
     cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);

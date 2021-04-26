@@ -22,13 +22,13 @@ using namespace GenApi;
 class ImageGrabber {
 private:
     size_t cameraCount;
-    vector<ImageEventHandler*> imageHandlers;
+    vector<ImageEventHandler *> imageHandlers;
 
 public:
     CBaslerUniversalInstantCameraArray cameras;
 
-    explicit ImageGrabber(ArgumentsParser parser);
+    explicit ImageGrabber(const ArgumentsParser &parser);
 
-    void Grab(ArgumentsParser parser);
+    void Grab(const ArgumentsParser &parser);
 };
 

@@ -46,7 +46,6 @@ void ArgumentsParser::PrintHelp() {
          "-i (image)         Save images instead of video. Optional argument setting the image quality." << endl <<
          "                   Quality has to be between 0 and 100, the higher is the better (default: " <<
          DEFAULT_IMG_QUALITY << ")." << endl <<
-         "                   Quality has to be written right after the option without space (e. g. -i42)." << endl <<
          "-o (output)        Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
          "                   This folder has to contain folders: img, log, vid." << endl <<
          "-t (time)          Set time (in ms) between images grabbed (default: " << DEFAULT_WAIT_TIME << ")." << endl <<
@@ -79,18 +78,21 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
 
             case 'i':
                 image = true;
-                if (optarg) {
+                if (optarg == nullptr && argv[optind] != nullptr && argv[optind][0] != '-') {
+                    imgQuality = (int) LoadNumber(argv[optind]);
+                    optind++;
+                } else {
                     try {
                         imgQuality = (int) LoadNumber(optarg);
                     }
                     catch (...) {
                         return false;
                     }
-                    if (imgQuality < 0 || imgQuality > 100) {
-                        cerr << "ERROR: Image quality has to be between 0 and 100. Currently " << imgQuality <<
-                             ". Quality automatically set to default value " << DEFAULT_IMG_QUALITY << "." << endl;
-                        imgQuality = DEFAULT_IMG_QUALITY;
-                    }
+                }
+                if (imgQuality < 0 || imgQuality > 100) {
+                    cerr << "ERROR: Image quality has to be between 0 and 100. Currently " << imgQuality <<
+                         ". Quality automatically set to default value " << DEFAULT_IMG_QUALITY << "." << endl;
+                    imgQuality = DEFAULT_IMG_QUALITY;
                 }
                 break;
 
@@ -130,7 +132,7 @@ string ArgumentsParser::GetOutDir() {
     return outDir;
 }
 
-int ArgumentsParser::GetImgQuality() {
+int ArgumentsParser::GetImgQuality() const {
     return imgQuality;
 }
 

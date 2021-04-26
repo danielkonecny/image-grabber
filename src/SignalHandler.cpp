@@ -1,3 +1,13 @@
+/**
+ * Image Grabber
+ * Application for grabbing images from Basler cameras using Pylon API.
+ * @file            SignalHandler.cpp
+ * @version         1.0
+ * @author          Daniel Konecny (xkonec75)
+ * @organisation    Brno University of Technology - Faculty of Information Technologies
+ * @date            27. 04. 2021
+ */
+
 #include <iostream>
 
 #include "SignalHandler.h"

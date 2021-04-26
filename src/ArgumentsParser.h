@@ -37,7 +37,7 @@ public:
 
     string GetOutDir();
 
-    int GetImgQuality();
+    int GetImgQuality() const;
 
     unsigned long long int GetWaitTime() const;
 };
