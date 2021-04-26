@@ -44,7 +44,8 @@ ImageGrabber::ImageGrabber(ArgumentsParser parser) {
         cameras[cameraIndex].RegisterConfiguration(
                 new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
 
-        cameras[cameraIndex].RegisterImageEventHandler(&imageHandler, RegistrationMode_Append, Cleanup_Delete);
+        imageHandlers.push_back(new ImageEventHandler());
+        cameras[cameraIndex].RegisterImageEventHandler(imageHandlers[cameraIndex], RegistrationMode_Append, Cleanup_Delete);
 
         if (parser.IsVerbose()) {
             cout << "Using device " << cameras[cameraIndex].GetDeviceInfo().GetModelName() << endl;
@@ -56,7 +57,7 @@ ImageGrabber::ImageGrabber(ArgumentsParser parser) {
         // Open the camera.
         cameras[cameraIndex].Open();
 
-        imageHandler.Configure(cameras[cameraIndex], parser);
+        imageHandlers[cameraIndex]->Configure(cameras[cameraIndex], parser);
 
         // Enable chunks in general.
         if (!cameras[cameraIndex].ChunkModeActive.TrySetValue(true))

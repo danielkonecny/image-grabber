@@ -22,7 +22,7 @@ using namespace GenApi;
 class ImageGrabber {
 private:
     size_t cameraCount;
-    ImageEventHandler imageHandler;
+    vector<ImageEventHandler*> imageHandlers;
 
 public:
     CBaslerUniversalInstantCameraArray cameras;
