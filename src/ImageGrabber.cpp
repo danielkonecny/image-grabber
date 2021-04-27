@@ -72,7 +72,7 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
 }
 
 void ImageGrabber::Grab(const ArgumentsParser &parser) {
-    unsigned long long waitTime = parser.GetWaitTime();
+    unsigned long long int waitTime = 1000000 / parser.GetFrameRate();
 
     cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 
@@ -81,7 +81,8 @@ void ImageGrabber::Grab(const ArgumentsParser &parser) {
             cameras[cameraIndex].WaitForFrameTriggerReady(100, TimeoutHandling_ThrowException);
             cameras[cameraIndex].ExecuteSoftwareTrigger();
         }
-        this_thread::sleep_for(chrono::milliseconds(waitTime));
+
+        this_thread::sleep_for(chrono::microseconds(waitTime));
     }
 }
 

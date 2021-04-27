@@ -70,7 +70,7 @@ void ImageEventHandler::Configure(CBaslerUniversalInstantCamera &camera, Argumen
         vidNameStream << outDir << "/vid/cam" << cameraSerialNum
                       << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
         string vidNameString = vidNameStream.str();
-        vidOutput.open(vidNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), 1,
+        vidOutput.open(vidNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), parser.GetFrameRate(),
                        Size((int) width.GetMax(), (int) height.GetMax()));
     }
 

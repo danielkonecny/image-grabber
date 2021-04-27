@@ -11,7 +11,7 @@
 using namespace std;
 
 #define DEFAULT_IMG_QUALITY 95
-#define DEFAULT_WAIT_TIME 10
+#define DEFAULT_FRAME_RATE 25
 #define DEFAULT_OUT_DIR "out"
 #define DEFAULT_IMAGE false
 #define DEFAULT_VERBOSE false
@@ -21,7 +21,7 @@ private:
     bool image = DEFAULT_IMAGE;
     string outDir = DEFAULT_OUT_DIR;
     int imgQuality = DEFAULT_IMG_QUALITY;
-    unsigned long long int waitTime = DEFAULT_WAIT_TIME;
+    unsigned int frameRate = DEFAULT_FRAME_RATE;
     bool verbose = DEFAULT_VERBOSE;
 
     static void PrintHelp();
@@ -39,5 +39,5 @@ public:
 
     int GetImgQuality() const;
 
-    unsigned long long int GetWaitTime() const;
+    unsigned int GetFrameRate() const;
 };
