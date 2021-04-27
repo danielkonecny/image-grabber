@@ -16,7 +16,7 @@
 
 using namespace std;
 
-long long ArgumentsParser::LoadNumber(char *numberAsChars) {
+long long ArgumentsParser::LoadInteger(char *numberAsChars) {
     string::size_type length;
     string numberAsString = numberAsChars;
     int numberAsInt;
@@ -40,9 +40,35 @@ long long ArgumentsParser::LoadNumber(char *numberAsChars) {
     return numberAsInt;
 }
 
+double ArgumentsParser::LoadDouble(char *numberAsChars) {
+    string::size_type length;
+    string numberAsString = numberAsChars;
+    double numberAsDouble;
+
+    try {
+        numberAsDouble = stod(numberAsString, &length);
+    }
+    catch (const invalid_argument &ia) {
+        cerr << "Invalid number conversion" << endl;
+        throw;
+    }
+    catch (const out_of_range &oor) {
+        cerr << "Number out of range" << endl;
+        throw;
+    }
+    if (!numberAsString.substr(length).empty()) {
+        cerr << "Invalid number format" << endl;
+        throw;
+    }
+
+    return numberAsDouble;
+}
+
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
+         "-e (--exposure)   Set exposure time in microseconds, range may vary (for example 28-1e7)." << endl <<
          "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
+         "-g (--gain)       Set gain, range may vary (for example 0-23.59)." << endl <<
          "-h (--help)       Show help." << endl <<
          "-i (--image)      Save images instead of video. Optional argument setting the image quality." << endl <<
          "                  Quality has to be between 0 and 100, the higher is the better (default: " <<
@@ -53,10 +79,12 @@ void ArgumentsParser::PrintHelp() {
 }
 
 bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
-    const char *const short_opts = "f:hi::o:v";
+    const char *const short_opts = "e:f:g:hi::o:v";
 
     const option long_opts[] = {
+            {"exposure",  required_argument, nullptr, 'e'},
             {"framerate", required_argument, nullptr, 'f'},
+            {"gain",      required_argument, nullptr, 'g'},
             {"help",      no_argument,       nullptr, 'h'},
             {"image",     optional_argument, nullptr, 'i'},
             {"output",    required_argument, nullptr, 'o'},
@@ -72,9 +100,18 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
         }
 
         switch (opt) {
+            case 'e':
+                try {
+                    exposureTime = LoadDouble(optarg);
+                }
+                catch (...) {
+                    return false;
+                }
+                break;
+
             case 'f':
                 try {
-                    frameRate = (unsigned int) LoadNumber(optarg);
+                    frameRate = (unsigned int) LoadInteger(optarg);
                 }
                 catch (...) {
                     return false;
@@ -86,6 +123,15 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
                 }
                 break;
 
+            case 'g':
+                try {
+                    gain = LoadDouble(optarg);
+                }
+                catch (...) {
+                    return false;
+                }
+                break;
+
             case 'v':
                 verbose = true;
                 break;
@@ -93,11 +139,11 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
             case 'i':
                 image = true;
                 if (optarg == nullptr && argv[optind] != nullptr && argv[optind][0] != '-') {
-                    imgQuality = (int) LoadNumber(argv[optind]);
+                    imgQuality = (int) LoadInteger(argv[optind]);
                     optind++;
                 } else {
                     try {
-                        imgQuality = (int) LoadNumber(optarg);
+                        imgQuality = (int) LoadInteger(optarg);
                     }
                     catch (...) {
                         return false;
@@ -143,4 +189,12 @@ int ArgumentsParser::GetImgQuality() const {
 
 unsigned int ArgumentsParser::GetFrameRate() const {
     return frameRate;
+}
+
+double ArgumentsParser::getExposureTime() const {
+    return exposureTime;
+}
+
+double ArgumentsParser::getGain() const {
+    return gain;
 }

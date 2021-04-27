@@ -78,7 +78,7 @@ void ImageGrabber::Grab(const ArgumentsParser &parser) {
 
     while (cameras.IsGrabbing()) {
         for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
-            cameras[cameraIndex].WaitForFrameTriggerReady(100, TimeoutHandling_ThrowException);
+            cameras[cameraIndex].WaitForFrameTriggerReady(5000, TimeoutHandling_ThrowException);
             cameras[cameraIndex].ExecuteSoftwareTrigger();
         }
 

@@ -40,8 +40,16 @@ private:
     string outDir;
     int imgQuality;
 
+    double gain;
+    double exposureTime;
+    double whiteBalanceR;
+    double whiteBalanceG;
+    double whiteBalanceB;
+
 public:
     ~ImageEventHandler() override;
+
+    static void SetCameraParams(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser);
 
     void Configure(CBaslerUniversalInstantCamera &camera, ArgumentsParser parser);
 

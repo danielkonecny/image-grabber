@@ -24,9 +24,14 @@ private:
     unsigned int frameRate = DEFAULT_FRAME_RATE;
     bool verbose = DEFAULT_VERBOSE;
 
+    double exposureTime = -1;
+    double gain = -1;
+
     static void PrintHelp();
 
-    static long long LoadNumber(char *numberAsChars);
+    static long long LoadInteger(char *numberAsChars);
+
+    static double LoadDouble(char *numberAsChars);
 
 public:
     bool ProcessArguments(int argc, char *argv[]);
@@ -40,4 +45,8 @@ public:
     int GetImgQuality() const;
 
     unsigned int GetFrameRate() const;
+
+    double getExposureTime() const;
+
+    double getGain() const;
 };
