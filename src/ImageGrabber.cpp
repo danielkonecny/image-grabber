@@ -2,10 +2,10 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ImageGrabber.cpp
- * @version         2.0
+ * @version         3.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            03. 04. 2021
+ * @date            27. 04. 2021
  */
 
 #include <iostream>

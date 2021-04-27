@@ -2,10 +2,10 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ArgumentsParser.cpp
- * @version         1.0
+ * @version         2.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            03. 04. 2021
+ * @date            27. 04. 2021
  */
 
 
@@ -42,14 +42,14 @@ long long ArgumentsParser::LoadNumber(char *numberAsChars) {
 
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-         "-f (framerate)     Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
-         "-h (help)          Show help." << endl <<
-         "-i (image)         Save images instead of video. Optional argument setting the image quality." << endl <<
-         "                   Quality has to be between 0 and 100, the higher is the better (default: " <<
+         "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
+         "-h (--help)       Show help." << endl <<
+         "-i (--image)      Save images instead of video. Optional argument setting the image quality." << endl <<
+         "                  Quality has to be between 0 and 100, the higher is the better (default: " <<
          DEFAULT_IMG_QUALITY << ")." << endl <<
-         "-o (output)        Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
-         "                   This folder has to contain folders: img, log, vid." << endl <<
-         "-v (verbose)       Print information about the camera state." << endl;
+         "-o (--output)     Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
+         "                  This folder has to contain folders: img, log, vid." << endl <<
+         "-v (--verbose)    Print information about the camera state." << endl;
 }
 
 bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {

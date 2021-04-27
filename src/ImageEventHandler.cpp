@@ -2,10 +2,10 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ImageEventHandler.cpp
- * @version         1.0
+ * @version         2.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            02. 04. 2021
+ * @date            27. 04. 2021
  */
 
 #include <iostream>
@@ -130,7 +130,7 @@ void ImageEventHandler::OnImageGrabbed(
             imwrite(imgNameString, imgMat, vector<int>({IMWRITE_JPEG_QUALITY, imgQuality}));
 
             timestampFile << "\"img\"," << cameraSerialNum << ",\"" << imgNameString << "\","
-                          << timestamp << ",\"" << datetimeString << "\"\n";
+                          << timestamp << ",\"" << datetimeString << "\"" << endl;
         } else {
             vidOutput.write(imgMat);
 
@@ -140,9 +140,8 @@ void ImageEventHandler::OnImageGrabbed(
             string vidNameString = vidNameStream.str();
 
             timestampFile << "\"vid\"," << cameraSerialNum << ",\"" << vidNameString << "\","
-                          << timestamp << ",\"" << datetimeString << "\"\n";
+                          << timestamp << ",\"" << datetimeString << "\"" << endl;
         }
-        timestampFile.flush();
 
         if (verbose) {
             cout << "Camera " << cameraSerialNum << " grabbed image at " <<
