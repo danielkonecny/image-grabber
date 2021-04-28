@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <ctime>
 #include <thread>
 #include <stdexcept>
 #include <pylon/PylonIncludes.h>
@@ -107,11 +108,11 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
 
         // The camera has been found. Create and attach it to the Instant Camera object.
         if (tlFactory.EnumerateDevices(devices, filter) > 0) {
-            camera.Attach(tlFactory.CreateDevice(devices[0]));
+            camera.Attach(tlFactory.CreateDevice(devices[index]));
             break;
         }
 
-        WaitObject::Sleep(250);
+        this_thread::sleep_for(chrono::milliseconds(250));
     }
 
     // Register an image event handler that accesses the chunk data.
@@ -140,25 +141,30 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
 }
 
 void ImageGrabber::Grab(const ArgumentsParser &parser) {
-    unsigned long long int waitTime = 1000000 / parser.GetFrameRate();
+    chrono::system_clock::duration waitInterval = chrono::microseconds(1000000 / parser.GetFrameRate());
 
     while (true) {
         try {
             cameras.StartGrabbing(GrabStrategy_OneByOne, GrabLoop_ProvidedByInstantCamera);
 
+            chrono::system_clock::time_point waitTime = chrono::system_clock::now() + waitInterval;
+
             while (cameras.IsGrabbing()) {
                 for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
                     cameras[cameraIndex].WaitForFrameTriggerReady(5000, TimeoutHandling_ThrowException);
+                }
+                for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
                     cameras[cameraIndex].ExecuteSoftwareTrigger();
                 }
-                this_thread::sleep_for(chrono::microseconds(waitTime));
+                this_thread::sleep_until(waitTime);
+                waitTime += waitInterval;
             }
         }
         catch (const GenericException &e) {
             cameras.StopGrabbing();
 
             // Known issue: Wait until the system safely detects a possible removal.
-            WaitObject::Sleep(1000);
+            this_thread::sleep_for(chrono::milliseconds(1000));
 
             // An exception occurred. Is it because the camera device has been physically removed?
             if (cameras.IsCameraDeviceRemoved()) {
