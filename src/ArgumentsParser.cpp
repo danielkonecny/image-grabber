@@ -65,9 +65,15 @@ double ArgumentsParser::LoadDouble(char *numberAsChars) {
 
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-         "-e (--exposure)   Set exposure time in microseconds, range may vary (for example 28 - 1e7)." << endl <<
+         "-R (--bwr)        Set balance white red channel, larger than 0 (default: auto continuous)." << endl <<
+         "                  (=1 red intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
+         "-G (--bwg)        Set balance white green channel, larger than 0 (default: auto continuous)." << endl <<
+         "                  (=1 green intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
+         "-B (--bwb)        Set balance white blue channel, larger than 0 (default: auto continuous)." << endl <<
+         "                  (=1 blue intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
+         "-e (--exposure)   Set exposure time in microseconds, larger than 0 (default: auto continuous)." << endl <<
          "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
-         "-g (--gain)       Set gain, range may vary (for example 0 - 23.59)." << endl <<
+         "-g (--gain)       Set gain, larger than 0, (default: auto continuous)." << endl <<
          "-h (--help)       Show help." << endl <<
          "-i (--image)      Save images instead of video." << endl <<
          "-o (--output)     Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
@@ -78,9 +84,12 @@ void ArgumentsParser::PrintHelp() {
 }
 
 bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
-    const char *const short_opts = "e:f:g:hio:q:v";
+    const char *const short_opts = "R:G:B:e:f:g:hio:q:v";
 
     const option long_opts[] = {
+            {"bwr",       required_argument, nullptr, 'R'},
+            {"bwg",       required_argument, nullptr, 'G'},
+            {"bwb",       required_argument, nullptr, 'B'},
             {"exposure",  required_argument, nullptr, 'e'},
             {"framerate", required_argument, nullptr, 'f'},
             {"gain",      required_argument, nullptr, 'g'},
@@ -100,12 +109,59 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
         }
 
         switch (opt) {
+            case 'R':
+                try {
+                    balanceWhiteRed = LoadDouble(optarg);
+                }
+                catch (...) {
+                    return false;
+                }
+                if (balanceWhiteRed < 0) {
+                    cerr << "ERROR: Balance white (red channel) has to be greater than 0. Currently " <<
+                         balanceWhiteRed << ". Balance white (red channel) set automatically." << endl;
+                    balanceWhiteRed = DEFAULT_BALANCE_WHITE_RED;
+                }
+                break;
+
+            case 'G':
+                try {
+                    balanceWhiteGreen = LoadDouble(optarg);
+                }
+                catch (...) {
+                    return false;
+                }
+                if (balanceWhiteGreen < 0) {
+                    cerr << "ERROR: Balance white (green channel) has to be greater than 0. Currently " <<
+                         balanceWhiteGreen << ". Balance white (green channel) set automatically." << endl;
+                    balanceWhiteGreen = DEFAULT_BALANCE_WHITE_GREEN;
+                }
+                break;
+
+            case 'B':
+                try {
+                    balanceWhiteBlue = LoadDouble(optarg);
+                }
+                catch (...) {
+                    return false;
+                }
+                if (balanceWhiteBlue < 0) {
+                    cerr << "ERROR: Balance white (blue channel) has to be greater than 0. Currently " <<
+                         balanceWhiteBlue << ". Balance white (blue channel) set automatically." << endl;
+                    balanceWhiteBlue = DEFAULT_BALANCE_WHITE_BLUE;
+                }
+                break;
+
             case 'e':
                 try {
                     exposureTime = LoadDouble(optarg);
                 }
                 catch (...) {
                     return false;
+                }
+                if (exposureTime < 0) {
+                    cerr << "ERROR: Exposure time has to be greater than 0. Currently " << exposureTime <<
+                         ". Exposure time set automatically." << endl;
+                    exposureTime = DEFAULT_EXPOSURE_TIME;
                 }
                 break;
 
@@ -129,6 +185,11 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
                 }
                 catch (...) {
                     return false;
+                }
+                if (gain < 0) {
+                    cerr << "ERROR: Gain has to be greater than 0. Currently " << gain << ". Gain set automatically."
+                         << endl;
+                    gain = DEFAULT_GAIN;
                 }
                 break;
 
@@ -189,10 +250,22 @@ unsigned int ArgumentsParser::GetFrameRate() const {
     return frameRate;
 }
 
-double ArgumentsParser::getExposureTime() const {
+double ArgumentsParser::GetExposureTime() const {
     return exposureTime;
 }
 
-double ArgumentsParser::getGain() const {
+double ArgumentsParser::GetGain() const {
     return gain;
+}
+
+double ArgumentsParser::GetBalanceWhiteRed() const {
+    return balanceWhiteRed;
+}
+
+double ArgumentsParser::GetBalanceWhiteGreen() const {
+    return balanceWhiteGreen;
+}
+
+double ArgumentsParser::GetBalanceWhiteBlue() const {
+    return balanceWhiteBlue;
 }

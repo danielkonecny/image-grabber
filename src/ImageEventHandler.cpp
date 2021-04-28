@@ -15,6 +15,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "ImageEventHandler.h"
+#include "ConfigurationEventPrinter.h"
 
 using namespace std;
 using namespace Pylon;
@@ -25,13 +26,13 @@ using namespace cv;
 ImageEventHandler::~ImageEventHandler() {
     logFile.close();
     if (verbose) {
-        cout << "Log file closed." << endl;
+        cout << GetDateTime() << "Log file closed." << endl;
     }
 
     if (!image) {
         vidOutput.release();
         if (verbose) {
-            cout << "Video " << fileNameString << " released." << endl;
+            cout << GetDateTime() << "Video " << fileNameString << " released." << endl;
         }
     }
 }
@@ -60,30 +61,70 @@ void ImageEventHandler::SetProgramParams(ArgumentsParser parser) {
 void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser) {
     INodeMap &nodeMap = camera.GetNodeMap();
 
-    exposureTime = parser.getExposureTime();
-    gain = parser.getGain();
+    exposureTime = parser.GetExposureTime();
+    gain = parser.GetGain();
+    balanceWhiteRed = parser.GetBalanceWhiteRed();
+    balanceWhiteGreen = parser.GetBalanceWhiteGreen();
+    balanceWhiteBlue = parser.GetBalanceWhiteBlue();
 
-    if (exposureTime != -1) {
+    if (exposureTime == -1) {
+        /*
+        // Set the Exposure Auto auto function to its minimum lower limit and its maximum upper limit
+        auto minLowerLimit = camera.AutoExposureTimeLowerLimit.GetMin();
+        auto maxUpperLimit = camera.AutoExposureTimeUpperLimit.GetMax();
+        camera.AutoExposureTimeLowerLimit.SetValue(minLowerLimit);
+        camera.AutoExposureTimeUpperLimit.SetValue(maxUpperLimit);
+        // Enable Exposure Auto by setting the operating mode to Continuous
+        camera.ExposureAuto.SetValue(ExposureAuto_Continuous);
+         */
+        exposureTime = camera.ExposureTime.GetValue();
+    } else {
         camera.ExposureMode.SetValue(ExposureMode_Timed);
         camera.ExposureAuto.SetValue(ExposureAuto_Off);
         camera.ExposureTime.SetValue(exposureTime);
-    } else {
-        exposureTime = camera.ExposureTime.GetValue();
     }
 
-    if (gain != -1) {
+    if (gain == -1) {
+        /*
+        // Set the the Gain Auto auto function to its minimum lower limit and its maximum upper limit
+        auto minLowerLimit = camera.AutoGainLowerLimit.GetMin();
+        auto maxUpperLimit = camera.AutoGainUpperLimit.GetMax();
+        camera.AutoGainLowerLimit.SetValue(minLowerLimit);
+        camera.AutoGainUpperLimit.SetValue(maxUpperLimit);
+        // Enable Gain Auto by setting the operating mode to Continuous
+        camera.GainAuto.SetValue(GainAuto_Continuous);
+         */
+        gain = camera.Gain.GetValue();
+    } else {
         camera.GainAuto.SetValue(GainAuto_Off);
         camera.Gain.SetValue(gain);
-    } else {
-        gain = camera.Gain.GetValue();
     }
 
+    /*
+    // Enable Balance White Auto by setting the operating mode to Continuous.
+    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
+     */
+
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
-    whiteBalanceR = camera.BalanceRatio.GetValue();
+    if (balanceWhiteRed == -1) {
+        balanceWhiteRed = camera.BalanceRatio.GetValue();
+    } else {
+        camera.BalanceRatioAbs.SetValue(balanceWhiteRed);
+    }
+
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Green);
-    whiteBalanceG = camera.BalanceRatio.GetValue();
+    if (balanceWhiteGreen == -1) {
+        balanceWhiteGreen = camera.BalanceRatio.GetValue();
+    } else {
+        camera.BalanceRatioAbs.SetValue(balanceWhiteGreen);
+    }
+
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Blue);
-    whiteBalanceB = camera.BalanceRatio.GetValue();
+    if(balanceWhiteBlue == -1) {
+        balanceWhiteBlue = camera.BalanceRatio.GetValue();
+    } else {
+        camera.BalanceRatioAbs.SetValue(balanceWhiteBlue);
+    }
 
     CIntegerParameter camWidth(nodeMap, "Width");
     CIntegerParameter camHeight(nodeMap, "Height");
@@ -92,6 +133,16 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
     height = (int) camHeight.GetMax();
 
     cameraSerialNum = static_cast<const char *>(camera.GetDeviceInfo().GetSerialNumber());
+
+    cout << GetDateTime() << "Camera " << camera.GetDeviceInfo().GetSerialNumber() << " details." << endl;
+    cout << GetDateTime() << "- Offset X: " << camera.OffsetX.GetValue() << endl;
+    cout << GetDateTime() << "- Offset Y: " << camera.OffsetY.GetValue() << endl;
+    cout << GetDateTime() << "- Width: " << camera.Width.GetValue() << endl;
+    cout << GetDateTime() << "- Height: " << camera.Height.GetValue() << endl;
+    cout << GetDateTime() << "- ROI Offset X: " << camera.AutoFunctionROIOffsetX.GetValue() << endl;
+    cout << GetDateTime() << "- ROI Offset Y: " << camera.AutoFunctionROIOffsetY.GetValue() << endl;
+    cout << GetDateTime() << "- ROI Width: " << camera.AutoFunctionROIWidth.GetValue() << endl;
+    cout << GetDateTime() << "- ROI Height: " << camera.AutoFunctionROIHeight.GetValue() << endl;
 }
 
 /**
@@ -130,21 +181,19 @@ void ImageEventHandler::OpenVidOutput(unsigned int frameRate) {
 }
 
 void ImageEventHandler::PrintCameraState() {
-    cout << endl;
-    cout << "Camera " << cameraSerialNum << " settings:" << endl;
+    cout << GetDateTime() << "Camera " << cameraSerialNum << " settings:" << endl;
     if (image) {
-        cout << "- Grabbing images in IMAGE MODE." << endl;
+        cout << GetDateTime() << "- Grabbing images in IMAGE MODE." << endl;
     } else {
-        cout << "- Grabbing images in VIDEO MODE." << endl;
+        cout << GetDateTime() << "- Grabbing images in VIDEO MODE." << endl;
     }
-    cout << "- Resolution is " << width << "x" << height << "." << endl;
-    cout << "- Offset set to " << timeOffset << " ns." << endl;
-    cout << "- Gain is " << gain << "." << endl;
-    cout << "- Exposure time is " << exposureTime << "." << endl;
-    cout << "- White balance (red) is " << whiteBalanceR << "." << endl;
-    cout << "- White balance (green) is " << whiteBalanceG << "." << endl;
-    cout << "- White balance (blue) is " << whiteBalanceB << "." << endl;
-    cout << endl;
+    cout << GetDateTime() << "- Resolution is " << width << "x" << height << "." << endl;
+    cout << GetDateTime() << "- Offset set to " << timeOffset << " ns." << endl;
+    cout << GetDateTime() << "- Gain is " << gain << "." << endl;
+    cout << GetDateTime() << "- Exposure time is " << exposureTime << "." << endl;
+    cout << GetDateTime() << "- White balance (red) is " << balanceWhiteRed << "." << endl;
+    cout << GetDateTime() << "- White balance (green) is " << balanceWhiteGreen << "." << endl;
+    cout << GetDateTime() << "- White balance (blue) is " << balanceWhiteBlue << "." << endl;
 }
 
 string ImageEventHandler::NanosecondsToDatetime(unsigned long long int originalTime) {
@@ -173,7 +222,7 @@ string ImageEventHandler::NanosecondsToFileDatetime(unsigned long long int origi
 
     ostringstream fileDatetimeStream;
     fileDatetimeStream << fileDateString << "_" << setfill('0') << setw(2) << hours << "_" << setw(2) << minutes
-                   << "_" << setw(2) << seconds << "_" << setw(3) << milliseconds;
+                       << "_" << setw(2) << seconds << "_" << setw(3) << milliseconds;
     return fileDatetimeStream.str();
 }
 
@@ -204,16 +253,16 @@ void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
 
         logFile << imageIndex << ",\"" << mode << "\"," << cameraSerialNum << ",\"" << fileNameString << "\","
                 << timestamp << ",\"" << datetimeString << "\"," << chunkExposureTime << "," << chunkGain << ","
-                << whiteBalanceR << "," << whiteBalanceG << "," << whiteBalanceB << endl;
+                << balanceWhiteRed << "," << balanceWhiteGreen << "," << balanceWhiteBlue << endl;
 
         imageIndex++;
 
         if (verbose) {
-            cout << "Camera " << cameraSerialNum << " grabbed image at " <<
+            cout << GetDateTime() << "Camera " << cameraSerialNum << " grabbed image at " <<
                  datetimeString << " (" << to_string(timestamp) << " ms)." << endl;
         }
     } else {
-        cerr << "Error: " << hex << ptrGrabResult->GetErrorCode()
+        cerr << GetDateTime() << "Error: " << hex << ptrGrabResult->GetErrorCode()
              << dec << " " << ptrGrabResult->GetErrorDescription() << endl;
     }
 }

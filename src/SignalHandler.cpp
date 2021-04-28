@@ -16,6 +16,6 @@ using namespace std;
 user_exit::user_exit() = default;
 
 void HandleExit(int s) {
-    cerr << "Caught signal " << s << "." << endl;
+    (void) s;
     throw user_exit();
 }

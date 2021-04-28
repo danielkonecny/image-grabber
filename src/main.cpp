@@ -15,6 +15,7 @@
 #include "main.h"
 #include "ImageGrabber.h"
 #include "SignalHandler.h"
+#include "ConfigurationEventPrinter.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
                 imageGrabber.Grab(parser);
             }
             catch (const GenericException &e) {
-                cerr << "Could not grab an image: " << endl << e.GetDescription() << endl;
+                cerr << GetDateTime() << "Could not grab an image: " << endl << e.GetDescription() << endl;
                 exitCode = 1;
             }
 
@@ -46,11 +47,11 @@ int main(int argc, char *argv[]) {
         }
     }
     catch (const GenericException &e) {
-        cerr << "An exception occurred." << endl << e.GetDescription() << endl;
+        cerr << GetDateTime() << "An exception occurred." << endl << e.GetDescription() << endl;
         exitCode = 1;
     }
     catch (const user_exit &e) {
-        cout << "Exiting - signal sent by user." << endl;
+        cout << GetDateTime() << "Exiting..." << endl;
     }
 
     return exitCode;

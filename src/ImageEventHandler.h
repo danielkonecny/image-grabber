@@ -48,9 +48,9 @@ private:
     int height;
     double gain;
     double exposureTime;
-    double whiteBalanceR;
-    double whiteBalanceG;
-    double whiteBalanceB;
+    double balanceWhiteRed;
+    double balanceWhiteGreen;
+    double balanceWhiteBlue;
 
 public:
     ~ImageEventHandler() override;

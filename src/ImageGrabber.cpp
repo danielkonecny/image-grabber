@@ -37,6 +37,8 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
     cameras.Initialize(min(devices.size(), maxCamerasToUse));
     cameraCount = cameras.GetSize();
 
+    cout << GetDateTime() << "Number of cameras found: " << cameraCount << "." << endl;
+
     // Create and attach all Pylon Devices.
     for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
         cameras[cameraIndex].Attach(tlFactory.CreateDevice(devices[cameraIndex]));
@@ -55,12 +57,7 @@ void ImageGrabber::ConfigureCamera(CBaslerUniversalInstantCamera &camera, const 
     camera.RegisterImageEventHandler(imageHandlers[index], RegistrationMode_Append,
                                      Cleanup_Delete);
 
-    if (parser.IsVerbose()) {
-        cout << "Using device " << camera.GetDeviceInfo().GetModelName() << endl;
-
-        camera.RegisterConfiguration(
-                new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
-    }
+    camera.RegisterConfiguration(new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
 
     camera.Open();
 
@@ -95,6 +92,8 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
     DeviceInfoList_t filter;
     filter.push_back(info);
 
+    cout << GetDateTime() << "Waiting for camera " << info.GetSerialNumber() << " to be reconnected..." << endl;
+
     CTlFactory &tlFactory = CTlFactory::GetInstance();
     while (true) {
         // Try to find the camera we are looking for.
@@ -113,12 +112,7 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
     camera.RegisterConfiguration(
             new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
 
-    if (parser.IsVerbose()) {
-        cout << "Using device " << camera.GetDeviceInfo().GetModelName() << endl;
-
-        camera.RegisterConfiguration(
-                new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
-    }
+    camera.RegisterConfiguration(new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
 
     camera.Open();
 

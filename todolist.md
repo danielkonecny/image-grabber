@@ -21,9 +21,9 @@
 11. ~~Předělat nastavení intervalu na nastavení fps (z -t udělat -f), je to totiž potřeba ve framerate videa.~~
 12. ~~Nahradit `sleep_for` za `sleep_until`, aby byl přesný frame rate.~~
 13. ~~Přidat do CSV čítač snímků.~~
-14. Lepší výpisy na `stdout` - důležité informace vypsat vždy (počet nalezených kamer, připojení kamery, odpojení 
+14. ~~Lepší výpisy na `stdout` - důležité informace vypsat vždy (počet nalezených kamer, připojení kamery, odpojení 
     kamery, aktivní čekání na odpojenou kameru a jak dlouho se už čeká) a mít u těchto informací i timestamp. Další 
-    užitečné info vypsat ve verbose režimu.
+    užitečné info vypsat ve verbose režimu.~~
 15. ~~Z chunku si vzít exposuretime, gain a vyvážení bílé a uložit do CSV.~~
 16. Při nezvolení nahrávacích parametrů je mít nastavené automaticky.
 17. ~~ISO formát času v názvu souboru.~~

@@ -14,6 +14,12 @@ using namespace std;
 #define DEFAULT_OUT_DIR "out"
 #define DEFAULT_IMAGE false
 #define DEFAULT_VERBOSE false
+#define DEFAULT_EXPOSURE_TIME (-1)
+#define DEFAULT_GAIN (-1)
+#define DEFAULT_BALANCE_WHITE_RED (-1)
+#define DEFAULT_BALANCE_WHITE_GREEN (-1)
+#define DEFAULT_BALANCE_WHITE_BLUE (-1)
+
 
 class ArgumentsParser {
 private:
@@ -23,8 +29,11 @@ private:
     unsigned int frameRate = DEFAULT_FRAME_RATE;
     bool verbose = DEFAULT_VERBOSE;
 
-    double exposureTime = -1;
-    double gain = -1;
+    double exposureTime = DEFAULT_EXPOSURE_TIME;
+    double gain = DEFAULT_GAIN;
+    double balanceWhiteRed = DEFAULT_BALANCE_WHITE_RED;
+    double balanceWhiteGreen = DEFAULT_BALANCE_WHITE_GREEN;
+    double balanceWhiteBlue = DEFAULT_BALANCE_WHITE_BLUE;
 
     static void PrintHelp();
 
@@ -45,7 +54,13 @@ public:
 
     unsigned int GetFrameRate() const;
 
-    double getExposureTime() const;
+    double GetExposureTime() const;
 
-    double getGain() const;
+    double GetGain() const;
+
+    double GetBalanceWhiteRed() const;
+
+    double GetBalanceWhiteGreen() const;
+
+    double GetBalanceWhiteBlue() const;
 };
