@@ -24,8 +24,15 @@ using namespace cv;
 
 ImageEventHandler::~ImageEventHandler() {
     logFile.close();
+    if (verbose) {
+        cout << "Log file closed." << endl;
+    }
+
     if (!image) {
         vidOutput.release();
+        if (verbose) {
+            cout << "Video output released." << endl;
+        }
     }
 }
 

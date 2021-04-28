@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
         exitCode = 1;
     }
     catch (const user_exit &e) {
-        cout << "Closing." << endl;
+        cout << "Exiting - signal sent by user." << endl;
     }
 
     return exitCode;
