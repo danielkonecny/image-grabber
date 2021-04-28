@@ -71,8 +71,8 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         auto maxUpperLimit = camera.AutoExposureTimeUpperLimit.GetMax();
         camera.AutoExposureTimeLowerLimit.SetValue(minLowerLimit);
         camera.AutoExposureTimeUpperLimit.SetValue(maxUpperLimit);
-        // Enable Exposure Auto by setting the operating mode to Continuous
-        camera.ExposureAuto.SetValue(ExposureAuto_Continuous);
+        // Enable Exposure Auto by setting the operating mode to Once
+        camera.ExposureAuto.SetValue(ExposureAuto_Once);
         exposureTime = camera.ExposureTime.GetValue();
     } else {
         camera.ExposureMode.SetValue(ExposureMode_Timed);
@@ -86,16 +86,16 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         auto maxUpperLimit = camera.AutoGainUpperLimit.GetMax();
         camera.AutoGainLowerLimit.SetValue(minLowerLimit);
         camera.AutoGainUpperLimit.SetValue(maxUpperLimit);
-        // Enable Gain Auto by setting the operating mode to Continuous
-        camera.GainAuto.SetValue(GainAuto_Continuous);
+        // Enable Gain Auto by setting the operating mode to Once
+        camera.GainAuto.SetValue(GainAuto_Once);
         gain = camera.Gain.GetValue();
     } else {
         camera.GainAuto.SetValue(GainAuto_Off);
         camera.Gain.SetValue(gain);
     }
 
-    // Enable Balance White Auto by setting the operating mode to Continuous.
-    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
+    // Enable Balance White Auto by setting the operating mode to Once.
+    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Once);
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
     if (balanceWhiteRed == -1) {

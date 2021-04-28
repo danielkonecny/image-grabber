@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         }
     }
     catch (const GenericException &e) {
-        cerr << GetDateTime() << "An exception occurred." << endl << e.GetDescription() << endl;
+        cerr << GetDateTime() << "An exception occurred." << endl << GetDateTime() << e.GetDescription() << endl;
         exitCode = 1;
     }
     catch (const user_exit &e) {
