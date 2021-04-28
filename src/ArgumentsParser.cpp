@@ -77,7 +77,6 @@ void ArgumentsParser::PrintHelp() {
          "-h (--help)       Show help." << endl <<
          "-i (--image)      Save images instead of video." << endl <<
          "-o (--output)     Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
-         "                  This folder has to contain folders: img, log, vid." << endl <<
          "-q (--quality)    Set image quality between 0 and 100, the higher is the better (default: " <<
          DEFAULT_IMG_QUALITY << ")." << endl <<
          "-v (--verbose)    Print information about the camera state." << endl;

@@ -21,7 +21,6 @@ In the project root folder:
 * `-g` (`--gain`) - Set gain, range may vary (for example 0 - 23.59).
 * `-h` (`--help`) - Show help.
 * `-i` (`--image`) - Save images instead of video.
-* `-o` (`--output`) - Set folder for video/image and log output (default: out). This folder has to contain folders: 
-  img, log, vid.
+* `-o` (`--output`) - Set folder for video/image and log output (default: out).
 * `-q` (`--quality`) - Set image quality (only for `-i`) between 0 and 100, the higher is the better (default: 95).
 * `-v` (`--verbose`) - Print information about the camera state.

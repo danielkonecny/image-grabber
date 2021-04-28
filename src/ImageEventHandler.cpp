@@ -10,6 +10,7 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <filesystem>
 #include <pylon/PylonIncludes.h>
 #include <pylon/BaslerUniversalInstantCamera.h>
 #include <opencv2/opencv.hpp>
@@ -37,11 +38,21 @@ ImageEventHandler::~ImageEventHandler() {
     }
 }
 
+void ImageEventHandler::CreateOutDir() {
+    filesystem::create_directory(outDir);
+    filesystem::create_directory(outDir + "/log");
+    filesystem::create_directory(outDir + "/img");
+    filesystem::create_directory(outDir + "/vid");
+}
+
 void ImageEventHandler::SetProgramParams(ArgumentsParser parser) {
     verbose = parser.IsVerbose();
     image = parser.IsImage();
-    outDir = parser.GetOutDir();
     imgQuality = parser.GetImgQuality();
+
+    // Check if output directory exists and create if not.
+    outDir = parser.GetOutDir();
+    CreateOutDir();
 
     // Get string representing current date.
     time_t date = chrono::system_clock::to_time_t(chrono::system_clock::now());
@@ -114,7 +125,7 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
     }
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Blue);
-    if(balanceWhiteBlue == -1) {
+    if (balanceWhiteBlue == -1) {
         balanceWhiteBlue = camera.BalanceRatio.GetValue();
     } else {
         camera.BalanceRatioAbs.SetValue(balanceWhiteBlue);

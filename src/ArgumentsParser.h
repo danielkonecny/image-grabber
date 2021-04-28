@@ -44,23 +44,23 @@ private:
 public:
     bool ProcessArguments(int argc, char *argv[]);
 
-    bool IsVerbose() const;
+    [[nodiscard]] bool IsVerbose() const;
 
-    bool IsImage() const;
+    [[nodiscard]] bool IsImage() const;
 
     string GetOutDir();
 
-    int GetImgQuality() const;
+    [[nodiscard]] int GetImgQuality() const;
 
-    unsigned int GetFrameRate() const;
+    [[nodiscard]] unsigned int GetFrameRate() const;
 
-    double GetExposureTime() const;
+    [[nodiscard]] double GetExposureTime() const;
 
-    double GetGain() const;
+    [[nodiscard]] double GetGain() const;
 
-    double GetBalanceWhiteRed() const;
+    [[nodiscard]] double GetBalanceWhiteRed() const;
 
-    double GetBalanceWhiteGreen() const;
+    [[nodiscard]] double GetBalanceWhiteGreen() const;
 
-    double GetBalanceWhiteBlue() const;
+    [[nodiscard]] double GetBalanceWhiteBlue() const;
 };

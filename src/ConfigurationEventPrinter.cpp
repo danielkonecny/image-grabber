@@ -32,12 +32,12 @@ void ConfigurationEventPrinter::OnOpened(CInstantCamera &camera) {
 
 void ConfigurationEventPrinter::OnGrabStarted(CInstantCamera &camera) {
     cout << GetDateTime() << "Camera " << camera.GetDeviceInfo().GetSerialNumber() << " started grabbing images."
-    << endl;
+         << endl;
 }
 
 void ConfigurationEventPrinter::OnGrabStopped(CInstantCamera &camera) {
     cout << GetDateTime() << "Camera " << camera.GetDeviceInfo().GetSerialNumber() << " stopped grabbing images."
-    << endl;
+         << endl;
 }
 
 void ConfigurationEventPrinter::OnDestroy(CInstantCamera &camera) {

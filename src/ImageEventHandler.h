@@ -52,6 +52,8 @@ private:
     double balanceWhiteGreen;
     double balanceWhiteBlue;
 
+    void CreateOutDir();
+
 public:
     ~ImageEventHandler() override;
 
