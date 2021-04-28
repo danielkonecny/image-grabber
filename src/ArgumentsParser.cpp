@@ -2,7 +2,6 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ArgumentsParser.cpp
- * @version         2.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
  * @date            27. 04. 2021
@@ -66,9 +65,9 @@ double ArgumentsParser::LoadDouble(char *numberAsChars) {
 
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-         "-e (--exposure)   Set exposure time in microseconds, range may vary (for example 28-1e7)." << endl <<
+         "-e (--exposure)   Set exposure time in microseconds, range may vary (for example 28 - 1e7)." << endl <<
          "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
-         "-g (--gain)       Set gain, range may vary (for example 0-23.59)." << endl <<
+         "-g (--gain)       Set gain, range may vary (for example 0 - 23.59)." << endl <<
          "-h (--help)       Show help." << endl <<
          "-i (--image)      Save images instead of video. Optional argument setting the image quality." << endl <<
          "                  Quality has to be between 0 and 100, the higher is the better (default: " <<

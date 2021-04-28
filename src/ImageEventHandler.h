@@ -24,10 +24,10 @@ using namespace cv;
 
 class ImageEventHandler : public CBaslerUniversalImageEventHandler {
 private:
-    ofstream timestampFile;
+    ofstream logFile;
     string dateString;
     unsigned long long int timeOffset;
-    unsigned long long int timeGrabbingStarts;
+    unsigned long long int timeGrabbingStarts = 0;
     string cameraSerialNum;
 
     CPylonImage imgPylon;
@@ -40,6 +40,8 @@ private:
     string outDir;
     int imgQuality;
 
+    int width;
+    int height;
     double gain;
     double exposureTime;
     double whiteBalanceR;
@@ -49,9 +51,17 @@ private:
 public:
     ~ImageEventHandler() override;
 
-    static void SetCameraParams(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser);
+    void SetProgramParams(ArgumentsParser parser);
 
-    void Configure(CBaslerUniversalInstantCamera &camera, ArgumentsParser parser);
+    void SetCameraParams(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser);
+
+    void SetTimeOffset(CBaslerUniversalInstantCamera &camera);
+
+    void OpenLogFile();
+
+    void OpenVidOutput(unsigned int frameRate);
+
+    void PrintCameraState();
 
     string NanosecondsToDatetime(unsigned long long int originalTime);
 

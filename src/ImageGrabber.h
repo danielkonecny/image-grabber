@@ -2,10 +2,9 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            ImageGrabber.h
- * @version         3.0
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            27. 04. 2021
+ * @date            28. 04. 2021
  */
 
 #include <iostream>
@@ -28,6 +27,10 @@ public:
     CBaslerUniversalInstantCameraArray cameras;
 
     explicit ImageGrabber(const ArgumentsParser &parser);
+
+    void ConfigureCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
+
+    void ResetCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
 
     void Grab(const ArgumentsParser &parser);
 };

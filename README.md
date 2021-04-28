@@ -10,7 +10,9 @@ In the project root folder:
 4. Exit the app with `Ctrl+C`.
 
 ## Arguments
+* `-e` (`--exposure`) - Set exposure time in microseconds, range may vary (for example 28 - 1e7).
 * `-f` (`--framerate`) - Set framerate (fps) of recording (default: 25).
+* `-g` (`--gain`) - Set gain, range may vary (for example 0 - 23.59).
 * `-h` (`--help`) - Show help.
 * `-i` (`--image`) - Save images instead of video. Optional argument setting the image quality. Quality has to be 
   between 0 and 100, the higher is the better (default: 95).

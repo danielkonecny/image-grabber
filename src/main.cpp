@@ -2,10 +2,10 @@
  * Image Grabber
  * Application for grabbing images from Basler cameras using Pylon API.
  * @file            main.cpp
- * @version         3.0
+ * @version         3.2
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            27. 04. 2021
+ * @date            28. 04. 2021
  */
 
 #include <iostream>
@@ -51,7 +51,6 @@ int main(int argc, char *argv[]) {
     }
     catch (const user_exit &e) {
         cout << "Closing." << endl;
-        exitCode = 1;
     }
 
     return exitCode;
