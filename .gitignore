@@ -9,6 +9,9 @@ cmake_install.cmake
 # Binary files
 ImageGrabber
 
+# Output folders
+out/
+
 # CLion Project files
 .idea
 ImageGrabber.cbp
