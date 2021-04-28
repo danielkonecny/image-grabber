@@ -31,7 +31,7 @@ ImageEventHandler::~ImageEventHandler() {
     if (!image) {
         vidOutput.release();
         if (verbose) {
-            cout << "Video output released." << endl;
+            cout << "Video " << vidNameString << " released." << endl;
         }
     }
 }
