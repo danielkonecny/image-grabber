@@ -4,7 +4,7 @@
  * @file            SignalHandler.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            27. 04. 2021
+ * @date            29. 04. 2021
  */
 
 #include <iostream>

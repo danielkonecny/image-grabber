@@ -66,13 +66,15 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
     balanceWhiteBlue = parser.GetBalanceWhiteBlue();
 
     if (exposureTime == -1) {
+        /*
         // Set the Exposure Auto auto function to its minimum lower limit and its maximum upper limit
         auto minLowerLimit = camera.AutoExposureTimeLowerLimit.GetMin();
         auto maxUpperLimit = camera.AutoExposureTimeUpperLimit.GetMax();
         camera.AutoExposureTimeLowerLimit.SetValue(minLowerLimit);
         camera.AutoExposureTimeUpperLimit.SetValue(maxUpperLimit);
-        // Enable Exposure Auto by setting the operating mode to Once
-        camera.ExposureAuto.SetValue(ExposureAuto_Once);
+        // Enable Exposure Auto by setting the operating mode to Continuous
+        camera.ExposureAuto.SetValue(ExposureAuto_Continuous);
+         */
         exposureTime = camera.ExposureTime.GetValue();
     } else {
         camera.ExposureMode.SetValue(ExposureMode_Timed);
@@ -86,16 +88,16 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         auto maxUpperLimit = camera.AutoGainUpperLimit.GetMax();
         camera.AutoGainLowerLimit.SetValue(minLowerLimit);
         camera.AutoGainUpperLimit.SetValue(maxUpperLimit);
-        // Enable Gain Auto by setting the operating mode to Once
-        camera.GainAuto.SetValue(GainAuto_Once);
+        // Enable Gain Auto by setting the operating mode to Continuous
+        camera.GainAuto.SetValue(GainAuto_Continuous);
         gain = camera.Gain.GetValue();
     } else {
         camera.GainAuto.SetValue(GainAuto_Off);
         camera.Gain.SetValue(gain);
     }
 
-    // Enable Balance White Auto by setting the operating mode to Once.
-    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Once);
+    // Enable Balance White Auto by setting the operating mode to Continuous.
+    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
     if (balanceWhiteRed == -1) {
@@ -144,10 +146,9 @@ void ImageEventHandler::SetTimeOffset(CBaslerUniversalInstantCamera &camera) {
  * Open file for logging grabbed images.
  */
 void ImageEventHandler::OpenLogFile() {
-    string logNameString = outDir + "/log/cam" + cameraSerialNum + "log" + to_string(timeGrabbingStarts) + ".csv";
-
+    string fileDatetimeString = NanosecondsToFileDatetime(timeGrabbingStarts);
+    string logNameString = outDir + "/log/cam" + cameraSerialNum + "_log" + fileDatetimeString + ".csv";
     logFile.open(logNameString, fstream::out);
-
     logFile << R"("index","mode","camera","file_path","timestamp_in_ms","iso_datetime",)"
             << R"("exposure_time","gain","white_balance_r","white_balance_g","white_balance_b")" << endl;
 }
@@ -155,7 +156,7 @@ void ImageEventHandler::OpenLogFile() {
 void ImageEventHandler::OpenVidOutput(unsigned int frameRate) {
     mode = "vid";
     string fileDatetimeString = NanosecondsToFileDatetime(timeGrabbingStarts);
-    fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + mode + fileDatetimeString + ".avi";
+    fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + "_" + mode + fileDatetimeString + ".avi";
     vidOutput.open(fileNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), frameRate, Size(width, height));
 }
 
@@ -224,7 +225,7 @@ void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
 
         if (image) {
             string fileDatetimeString = NanosecondsToFileDatetime(timestamp);
-            fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + mode + fileDatetimeString + ".jpg";
+            fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + "_" + mode + fileDatetimeString + ".jpg";
             imwrite(fileNameString, imgMat, vector<int>({IMWRITE_JPEG_QUALITY, imgQuality}));
         } else {
             vidOutput.write(imgMat);

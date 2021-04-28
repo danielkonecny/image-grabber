@@ -4,7 +4,7 @@
  * @file            ArgumentsParser.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            27. 04. 2021
+ * @date            29. 04. 2021
  */
 
 
@@ -65,11 +65,11 @@ double ArgumentsParser::LoadDouble(char *numberAsChars) {
 
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-         "-R (--bwr)        Set balance white red channel, larger than 0 (default: auto continuous)." << endl <<
+         "-R (--bwr)        Set balance white (red channel), larger than 0 (default: auto continuous)." << endl <<
          "                  (=1 red intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
-         "-G (--bwg)        Set balance white green channel, larger than 0 (default: auto continuous)." << endl <<
+         "-G (--bwg)        Set balance white (green channel), larger than 0 (default: auto continuous)." << endl <<
          "                  (=1 green intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
-         "-B (--bwb)        Set balance white blue channel, larger than 0 (default: auto continuous)." << endl <<
+         "-B (--bwb)        Set balance white (blue channel), larger than 0 (default: auto continuous)." << endl <<
          "                  (=1 blue intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
          "-e (--exposure)   Set exposure time in microseconds, larger than 0 (default: auto continuous)." << endl <<
          "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<

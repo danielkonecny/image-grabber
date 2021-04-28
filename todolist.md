@@ -28,6 +28,8 @@
 16. ~~Při nezvolení nahrávacích parametrů je mít nastavené automaticky.~~
 17. ~~ISO formát času v názvu souboru.~~
 18. ~~Zdebugovat chybu při nahrávání videa - pravděpodobně špatné rozlišení, něco s area of interest.~~
+19. Vytvoření output složek, pokud neexistují.
 
 Notes:
 * V chunku není vyvážení bílé, třeba tahat z nastavení kamery.
+* Auto nastavení expozice nestíhá (moc dlouhá expozice a vyprší 5s timeout na WaitForFrameTriggerReady).
