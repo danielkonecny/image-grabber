@@ -59,8 +59,6 @@ void ImageEventHandler::SetProgramParams(ArgumentsParser parser) {
 }
 
 void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser) {
-    INodeMap &nodeMap = camera.GetNodeMap();
-
     exposureTime = parser.GetExposureTime();
     gain = parser.GetGain();
     balanceWhiteRed = parser.GetBalanceWhiteRed();
@@ -126,23 +124,10 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         camera.BalanceRatioAbs.SetValue(balanceWhiteBlue);
     }
 
-    CIntegerParameter camWidth(nodeMap, "Width");
-    CIntegerParameter camHeight(nodeMap, "Height");
-
-    width = (int) camWidth.GetMax();
-    height = (int) camHeight.GetMax();
+    width = (int) (camera.Width.GetValue() - camera.OffsetX.GetValue());
+    height = (int) (camera.Height.GetValue() - camera.OffsetY.GetValue());
 
     cameraSerialNum = static_cast<const char *>(camera.GetDeviceInfo().GetSerialNumber());
-
-    cout << GetDateTime() << "Camera " << camera.GetDeviceInfo().GetSerialNumber() << " details." << endl;
-    cout << GetDateTime() << "- Offset X: " << camera.OffsetX.GetValue() << endl;
-    cout << GetDateTime() << "- Offset Y: " << camera.OffsetY.GetValue() << endl;
-    cout << GetDateTime() << "- Width: " << camera.Width.GetValue() << endl;
-    cout << GetDateTime() << "- Height: " << camera.Height.GetValue() << endl;
-    cout << GetDateTime() << "- ROI Offset X: " << camera.AutoFunctionROIOffsetX.GetValue() << endl;
-    cout << GetDateTime() << "- ROI Offset Y: " << camera.AutoFunctionROIOffsetY.GetValue() << endl;
-    cout << GetDateTime() << "- ROI Width: " << camera.AutoFunctionROIWidth.GetValue() << endl;
-    cout << GetDateTime() << "- ROI Height: " << camera.AutoFunctionROIHeight.GetValue() << endl;
 }
 
 /**
