@@ -117,7 +117,7 @@ void ImageEventHandler::OpenLogFile() {
     logFile << R"("mode","camera","file_path","timestamp_in_ms","iso_datetime",)"
                   << R"("gain","exposure_time","white_balance_r","white_balance_g","white_balance_b")" << endl;
     */
-    logFile << R"("mode","camera","file_path","timestamp_in_ms","iso_datetime")" << endl;
+    logFile << R"("index","mode","camera","file_path","timestamp_in_ms","iso_datetime")" << endl;
 }
 
 void ImageEventHandler::OpenVidOutput(unsigned int frameRate) {
@@ -190,7 +190,7 @@ void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
                           << timestamp << ",\"" << datetimeString << "\"," << gain << "," << exposureTime << ","
                           << whiteBalanceR << "," << whiteBalanceG << "," << whiteBalanceB << endl;
             */
-            logFile << "\"img\"," << cameraSerialNum << ",\"" << imgNameString << "\","
+            logFile << imageIndex << ",\"img\"," << cameraSerialNum << ",\"" << imgNameString << "\","
                     << timestamp << ",\"" << datetimeString << "\"" << endl;
         } else {
             vidOutput.write(imgMat);
@@ -200,9 +200,11 @@ void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
                           << timestamp << ",\"" << datetimeString << "\"," << gain << "," << exposureTime << ","
                           << whiteBalanceR << "," << whiteBalanceG << "," << whiteBalanceB << endl;
             */
-            logFile << "\"vid\"," << cameraSerialNum << ",\"" << vidNameString << "\","
+            logFile << imageIndex << ",\"vid\"," << cameraSerialNum << ",\"" << vidNameString << "\","
                     << timestamp << ",\"" << datetimeString << "\"" << endl;
         }
+
+        imageIndex++;
 
         if (verbose) {
             cout << "Camera " << cameraSerialNum << " grabbed image at " <<

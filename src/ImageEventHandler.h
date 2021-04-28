@@ -25,12 +25,13 @@ using namespace cv;
 class ImageEventHandler : public CBaslerUniversalImageEventHandler {
 private:
     ofstream logFile;
-    string dateString;
     unsigned long long int timeOffset;
     unsigned long long int timeGrabbingStarts = 0;
+    string dateString;
     string vidNameString;
-    CPylonImage imgPylon;
+    unsigned long long int imageIndex = 0;
 
+    CPylonImage imgPylon;
     CImageFormatConverter formatConverter;
     VideoWriter vidOutput;
 
