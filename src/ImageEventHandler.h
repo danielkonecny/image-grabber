@@ -28,18 +28,19 @@ private:
     string dateString;
     unsigned long long int timeOffset;
     unsigned long long int timeGrabbingStarts = 0;
-    string cameraSerialNum;
-
+    string vidNameString;
     CPylonImage imgPylon;
-    CImageFormatConverter formatConverter;
 
+    CImageFormatConverter formatConverter;
     VideoWriter vidOutput;
 
     bool verbose;
+
     bool image;
     string outDir;
     int imgQuality;
 
+    string cameraSerialNum;
     int width;
     int height;
     double gain;

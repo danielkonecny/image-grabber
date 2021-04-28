@@ -117,7 +117,7 @@ void ImageEventHandler::OpenVidOutput(unsigned int frameRate) {
     ostringstream vidNameStream;
     vidNameStream << outDir << "/vid/cam" << cameraSerialNum
                   << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
-    string vidNameString = vidNameStream.str();
+    vidNameString = vidNameStream.str();
     vidOutput.open(vidNameString, VideoWriter::fourcc('M', 'J', 'P', 'G'), frameRate, Size(width, height));
 }
 
@@ -155,10 +155,8 @@ string ImageEventHandler::NanosecondsToDatetime(unsigned long long int originalT
     return datetimeStream.str();
 }
 
-void ImageEventHandler::OnImageGrabbed(
-        CBaslerUniversalInstantCamera &camera,
-        const CBaslerUniversalGrabResultPtr &ptrGrabResult) {
-
+void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
+                                       const CBaslerUniversalGrabResultPtr &ptrGrabResult) {
     if (ptrGrabResult->GrabSucceeded()) {
         if (!(ptrGrabResult->ChunkTimestamp.IsReadable()))
             return;
@@ -189,11 +187,6 @@ void ImageEventHandler::OnImageGrabbed(
                     << timestamp << ",\"" << datetimeString << "\"" << endl;
         } else {
             vidOutput.write(imgMat);
-
-            ostringstream vidNameStream;
-            vidNameStream << outDir << "/vid/cam" << cameraSerialNum
-                          << "vid" << std::to_string(timeGrabbingStarts) << ".avi";
-            string vidNameString = vidNameStream.str();
 
             /*
             logFile << "\"vid\"," << cameraSerialNum << ",\"" << vidNameString << "\","
