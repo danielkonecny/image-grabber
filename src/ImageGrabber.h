@@ -32,6 +32,8 @@ public:
 
     void ResetCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
 
+    static void SetImageChunks(CBaslerUniversalInstantCamera &camera);
+
     void Grab(const ArgumentsParser &parser);
 };
 

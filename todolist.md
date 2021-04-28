@@ -23,9 +23,11 @@
 13. ~~Přidat do CSV čítač snímků.~~
 14. Lepší výpisy na `stdout` - důležité informace vypsat vždy (počet nalezených kamer, připojení kamery, odpojení 
     kamery, aktivní čekání na odpojenou kameru a jak dlouho se už čeká) a mít u těchto informací i timestamp. Další 
-    užitečné info vypsat ve 
-    verbose režimu.
-15. Z chunku si vzít exposuretime, gain a vyvážení bílé a uložit do CSV.
+    užitečné info vypsat ve verbose režimu.
+15. ~~Z chunku si vzít exposuretime, gain a vyvážení bílé a uložit do CSV.~~
 16. Při nezvolení nahrávacích parametrů je mít nastavené automaticky.
-17. ISO formát času v názvu souboru.
+17. ~~ISO formát času v názvu souboru.~~
 18. Zdebugovat chybu při nahrávání videa - pravděpodobně špatné rozlišení, něco s area of interest.
+
+Notes:
+* V chunku není vyvážení bílé, třeba tahat z nastavení kamery.

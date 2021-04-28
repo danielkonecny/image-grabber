@@ -28,7 +28,9 @@ private:
     unsigned long long int timeOffset;
     unsigned long long int timeGrabbingStarts = 0;
     string dateString;
-    string vidNameString;
+    string fileDateString;
+    string mode = "img";
+    string fileNameString;
     unsigned long long int imageIndex = 0;
 
     CPylonImage imgPylon;
@@ -66,6 +68,8 @@ public:
     void PrintCameraState();
 
     string NanosecondsToDatetime(unsigned long long int originalTime);
+
+    string NanosecondsToFileDatetime(unsigned long long int originalTime);
 
     void OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
                         const CBaslerUniversalGrabResultPtr &ptrGrabResult) override;

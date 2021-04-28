@@ -77,13 +77,7 @@ void ImageGrabber::ConfigureCamera(CBaslerUniversalInstantCamera &camera, const 
         imageHandlers[index]->PrintCameraState();
     }
 
-    // Enable chunks in general.
-    if (!camera.ChunkModeActive.TrySetValue(true))
-        throw RUNTIME_EXCEPTION("The camera doesn't support chunk features"); // NOLINT(hicpp-exception-baseclass)
-
-    // Enable time stamp chunks.
-    camera.ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
-    camera.ChunkEnable.SetValue(true);
+    SetImageChunks(camera);
 }
 
 void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index) {
@@ -130,13 +124,22 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
 
     imageHandlers[index]->SetTimeOffset(camera);
 
+    SetImageChunks(camera);
+}
+
+void ImageGrabber::SetImageChunks(CBaslerUniversalInstantCamera &camera) {
     // Enable chunks in general.
     if (!camera.ChunkModeActive.TrySetValue(true))
-        throw RUNTIME_EXCEPTION( // NOLINT(hicpp-exception-baseclass)
-                "The camera doesn't support chunk features");
+        throw RUNTIME_EXCEPTION("The camera doesn't support chunk features"); // NOLINT(hicpp-exception-baseclass)
 
     // Enable time stamp chunks.
     camera.ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Timestamp);
+    camera.ChunkEnable.SetValue(true);
+
+    camera.ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_ExposureTime);
+    camera.ChunkEnable.SetValue(true);
+
+    camera.ChunkSelector.SetValue(Basler_UniversalCameraParams::ChunkSelector_Gain);
     camera.ChunkEnable.SetValue(true);
 }
 
