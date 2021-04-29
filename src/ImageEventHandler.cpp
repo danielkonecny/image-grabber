@@ -4,7 +4,7 @@
  * @file            ImageEventHandler.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            28. 04. 2021
+ * @date            29. 04. 2021
  */
 
 #include <iostream>
@@ -76,19 +76,49 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
     balanceWhiteGreen = parser.GetBalanceWhiteGreen();
     balanceWhiteBlue = parser.GetBalanceWhiteBlue();
 
+    camera.OffsetX.TrySetToMinimum();
+    camera.OffsetY.TrySetToMinimum();
+    camera.Width.SetToMaximum();
+    camera.Height.SetToMaximum();
+
+    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI1 );
+    camera.AutoFunctionROIUseBrightness.TrySetValue( true );   // ROI 1 is used for brightness control
+    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI2 );
+    camera.AutoFunctionROIUseBrightness.TrySetValue( false );   // ROI 2 is not used for brightness control
+
+    // Set the ROI (in this example the complete sensor is used)
+    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI1 );  // configure ROI 1
+    camera.AutoFunctionROIOffsetX.SetToMinimum();
+    camera.AutoFunctionROIOffsetY.SetToMinimum();
+    camera.AutoFunctionROIWidth.SetToMaximum();
+    camera.AutoFunctionROIHeight.SetToMaximum();
+
+    // Specify the target value
+    camera.AutoTargetBrightness.SetValue(0.6);
+    // Select auto function ROI 1
+    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI1);
+    // Enable the 'Brightness' auto function (Gain Auto + Exposure Auto)
+    // for the auto function ROI selected
+    camera.AutoFunctionROIUseBrightness.SetValue(true);
+
+    camera.ExposureMode.SetValue(ExposureMode_Timed);
+
     if (exposureTime == -1) {
-        /*
-        // Set the Exposure Auto auto function to its minimum lower limit and its maximum upper limit
-        auto minLowerLimit = camera.AutoExposureTimeLowerLimit.GetMin();
-        auto maxUpperLimit = camera.AutoExposureTimeUpperLimit.GetMax();
+        const double minLowerLimit = camera.AutoExposureTimeLowerLimit.GetMin();
+        // Maximal exposure time computed from given frame rate with additional time for image handling.
+        const double handlingTime = 5000.0; // 5 ms
+        const double maxUpperLimit = (1000000.0 / ((double) parser.GetFrameRate())) - handlingTime;
         camera.AutoExposureTimeLowerLimit.SetValue(minLowerLimit);
         camera.AutoExposureTimeUpperLimit.SetValue(maxUpperLimit);
+
+        // Reset the exposure time value because it stays the same if it is out of the specified range.
+        camera.ExposureAuto.SetValue(ExposureAuto_Off);
+        camera.ExposureTime.SetToMinimum();
+
         // Enable Exposure Auto by setting the operating mode to Continuous
         camera.ExposureAuto.SetValue(ExposureAuto_Continuous);
-         */
         exposureTime = camera.ExposureTime.GetValue();
     } else {
-        camera.ExposureMode.SetValue(ExposureMode_Timed);
         camera.ExposureAuto.SetValue(ExposureAuto_Off);
         camera.ExposureTime.SetValue(exposureTime);
     }
@@ -99,6 +129,7 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         auto maxUpperLimit = camera.AutoGainUpperLimit.GetMax();
         camera.AutoGainLowerLimit.SetValue(minLowerLimit);
         camera.AutoGainUpperLimit.SetValue(maxUpperLimit);
+
         // Enable Gain Auto by setting the operating mode to Continuous
         camera.GainAuto.SetValue(GainAuto_Continuous);
         gain = camera.Gain.GetValue();
@@ -107,6 +138,11 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         camera.Gain.SetValue(gain);
     }
 
+    // Select auto function ROI 2
+    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
+    // Enable the Balance White Auto auto function
+    // for the auto function ROI selected
+    camera.AutoFunctionROIUseWhiteBalance.SetValue(true);
     // Enable Balance White Auto by setting the operating mode to Continuous.
     camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
 
@@ -180,11 +216,11 @@ void ImageEventHandler::PrintCameraState() {
     }
     cout << GetDateTime() << "- Resolution is " << width << "x" << height << "." << endl;
     cout << GetDateTime() << "- Offset set to " << timeOffset << " ns." << endl;
-    cout << GetDateTime() << "- Gain is " << gain << "." << endl;
-    cout << GetDateTime() << "- Exposure time is " << exposureTime << "." << endl;
-    cout << GetDateTime() << "- White balance (red) is " << balanceWhiteRed << "." << endl;
-    cout << GetDateTime() << "- White balance (green) is " << balanceWhiteGreen << "." << endl;
-    cout << GetDateTime() << "- White balance (blue) is " << balanceWhiteBlue << "." << endl;
+    cout << GetDateTime() << "- Initial exposure time is " << exposureTime << "." << endl;
+    cout << GetDateTime() << "- Initial gain is " << gain << "." << endl;
+    cout << GetDateTime() << "- Initial white balance (red) is " << balanceWhiteRed << "." << endl;
+    cout << GetDateTime() << "- Initial white balance (green) is " << balanceWhiteGreen << "." << endl;
+    cout << GetDateTime() << "- Initial white balance (blue) is " << balanceWhiteBlue << "." << endl;
 }
 
 string ImageEventHandler::NanosecondsToDatetime(unsigned long long int originalTime) {

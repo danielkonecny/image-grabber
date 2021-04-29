@@ -49,15 +49,11 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
 
 
 void ImageGrabber::ConfigureCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index) {
-    // Register an image event handler that accesses the chunk data.
-    camera.RegisterConfiguration(
-            new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
+    camera.RegisterConfiguration(new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
+    camera.RegisterConfiguration(new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
 
     imageHandlers.push_back(new ImageEventHandler());
-    camera.RegisterImageEventHandler(imageHandlers[index], RegistrationMode_Append,
-                                     Cleanup_Delete);
-
-    camera.RegisterConfiguration(new ConfigurationEventPrinter, RegistrationMode_Append, Cleanup_Delete);
+    camera.RegisterImageEventHandler(imageHandlers[index], RegistrationMode_Append, Cleanup_Delete);
 
     camera.Open();
 
@@ -121,6 +117,10 @@ void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const Argu
     SetImageChunks(camera);
 }
 
+/**
+ * Register an image event handler that accesses the chunk data.
+ * @param camera
+ */
 void ImageGrabber::SetImageChunks(CBaslerUniversalInstantCamera &camera) {
     // Enable chunks in general.
     if (!camera.ChunkModeActive.TrySetValue(true))

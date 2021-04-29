@@ -32,4 +32,3 @@
 
 Notes:
 * V chunku není vyvážení bílé, třeba tahat z nastavení kamery.
-* Auto nastavení expozice nestíhá (moc dlouhá expozice a vyprší 5s timeout na WaitForFrameTriggerReady).
