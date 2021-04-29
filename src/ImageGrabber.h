@@ -30,7 +30,7 @@ public:
 
     void ConfigureCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
 
-    void ResetCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
+    void ResetCamera(CBaslerUniversalInstantCamera &camera, size_t index);
 
     static void SetImageChunks(CBaslerUniversalInstantCamera &camera);
 

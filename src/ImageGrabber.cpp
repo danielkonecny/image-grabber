@@ -73,7 +73,7 @@ void ImageGrabber::ConfigureCamera(CBaslerUniversalInstantCamera &camera, const 
     SetImageChunks(camera);
 }
 
-void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index) {
+void ImageGrabber::ResetCamera(CBaslerUniversalInstantCamera &camera, size_t index) {
     // Create a device info object for remembering the camera properties.
     CDeviceInfo info;
 
@@ -166,7 +166,7 @@ void ImageGrabber::Grab(const ArgumentsParser &parser) {
             // An exception occurred. Is it because the camera device has been physically removed?
             if (cameras.IsCameraDeviceRemoved()) {
                 for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
-                    ResetCamera(cameras[cameraIndex], parser, cameraIndex);
+                    ResetCamera(cameras[cameraIndex], cameraIndex);
                 }
             } else {
                 throw;

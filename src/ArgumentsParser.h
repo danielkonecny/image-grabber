@@ -26,7 +26,7 @@ private:
     bool image = DEFAULT_IMAGE;
     string outDir = DEFAULT_OUT_DIR;
     int imgQuality = DEFAULT_IMG_QUALITY;
-    unsigned int frameRate = DEFAULT_FRAME_RATE;
+    int frameRate = DEFAULT_FRAME_RATE;
     bool verbose = DEFAULT_VERBOSE;
 
     double exposureTime = DEFAULT_EXPOSURE_TIME;
@@ -52,7 +52,7 @@ public:
 
     [[nodiscard]] int GetImgQuality() const;
 
-    [[nodiscard]] unsigned int GetFrameRate() const;
+    [[nodiscard]] int GetFrameRate() const;
 
     [[nodiscard]] double GetExposureTime() const;
 

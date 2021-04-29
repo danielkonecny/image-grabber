@@ -245,7 +245,7 @@ int ArgumentsParser::GetImgQuality() const {
     return imgQuality;
 }
 
-unsigned int ArgumentsParser::GetFrameRate() const {
+int ArgumentsParser::GetFrameRate() const {
     return frameRate;
 }
 
