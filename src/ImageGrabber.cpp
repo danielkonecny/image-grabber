@@ -4,7 +4,7 @@
  * @file            ImageGrabber.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            29. 04. 2021
+ * @date            30. 04. 2021
  */
 
 #include <iostream>
@@ -21,7 +21,7 @@
 using namespace std;
 using namespace Pylon;
 using namespace GenApi;
-
+using namespace Basler_UniversalCameraParams;
 
 ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
     CTlFactory &tlFactory = CTlFactory::GetInstance();
@@ -47,6 +47,22 @@ ImageGrabber::ImageGrabber(const ArgumentsParser &parser) {
     }
 }
 
+/**
+ * Reset parameters of cameras. Set auto settings to off for later use.
+ */
+ImageGrabber::~ImageGrabber() {
+    for (size_t cameraIndex = 0; cameraIndex < cameraCount; cameraIndex++) {
+        cameras[cameraIndex].ExposureAuto.SetValue(ExposureAuto_Off);
+        cameras[cameraIndex].GainAuto.SetValue(GainAuto_Off);
+        cameras[cameraIndex].ExposureAuto.SetValue(ExposureAuto_Off);
+        cameras[cameraIndex].BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
+        cameras[cameraIndex].BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+        cameras[cameraIndex].BalanceRatioSelector.SetValue(BalanceRatioSelector_Green);
+        cameras[cameraIndex].BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+        cameras[cameraIndex].BalanceRatioSelector.SetValue(BalanceRatioSelector_Blue);
+        cameras[cameraIndex].BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+    }
+}
 
 void ImageGrabber::ConfigureCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index) {
     camera.RegisterConfiguration(new CSoftwareTriggerConfiguration, RegistrationMode_ReplaceAll, Cleanup_Delete);
@@ -138,7 +154,7 @@ void ImageGrabber::SetImageChunks(CBaslerUniversalInstantCamera &camera) {
 }
 
 void ImageGrabber::Grab(const ArgumentsParser &parser) {
-    chrono::system_clock::duration waitInterval = chrono::microseconds(1000000 / parser.GetFrameRate());
+    const chrono::system_clock::duration waitInterval = chrono::microseconds((int) (1000000.0 / parser.GetFrameRate()));
 
     while (true) {
         try {
@@ -174,4 +190,3 @@ void ImageGrabber::Grab(const ArgumentsParser &parser) {
         }
     }
 }
-

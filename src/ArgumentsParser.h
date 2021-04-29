@@ -4,13 +4,13 @@
  * @file            ArgumentsParser.h
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            29. 04. 2021
+ * @date            30. 04. 2021
  */
 
 using namespace std;
 
 #define DEFAULT_IMG_QUALITY 95
-#define DEFAULT_FRAME_RATE 25
+#define DEFAULT_FRAME_RATE 25.0
 #define DEFAULT_OUT_DIR "out"
 #define DEFAULT_IMAGE false
 #define DEFAULT_VERBOSE false
@@ -26,9 +26,9 @@ private:
     bool image = DEFAULT_IMAGE;
     string outDir = DEFAULT_OUT_DIR;
     int imgQuality = DEFAULT_IMG_QUALITY;
-    int frameRate = DEFAULT_FRAME_RATE;
     bool verbose = DEFAULT_VERBOSE;
 
+    double frameRate = DEFAULT_FRAME_RATE;
     double exposureTime = DEFAULT_EXPOSURE_TIME;
     double gain = DEFAULT_GAIN;
     double balanceWhiteRed = DEFAULT_BALANCE_WHITE_RED;
@@ -52,7 +52,7 @@ public:
 
     [[nodiscard]] int GetImgQuality() const;
 
-    [[nodiscard]] int GetFrameRate() const;
+    [[nodiscard]] double GetFrameRate() const;
 
     [[nodiscard]] double GetExposureTime() const;
 

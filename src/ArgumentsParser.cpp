@@ -4,7 +4,7 @@
  * @file            ArgumentsParser.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            29. 04. 2021
+ * @date            30. 04. 2021
  */
 
 
@@ -18,10 +18,10 @@ using namespace std;
 long long int ArgumentsParser::LoadInteger(char *numberAsChars) {
     string::size_type length;
     string numberAsString = numberAsChars;
-    int numberAsInt;
+    long long int numberAsInt;
 
     try {
-        numberAsInt = stoi(numberAsString, &length);
+        numberAsInt = stoll(numberAsString, &length);
     }
     catch (const invalid_argument &ia) {
         cerr << "Invalid number conversion" << endl;
@@ -166,7 +166,7 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
 
             case 'f':
                 try {
-                    frameRate = (int) LoadInteger(optarg);
+                    frameRate = LoadDouble(optarg);
                 }
                 catch (...) {
                     return false;
@@ -245,7 +245,7 @@ int ArgumentsParser::GetImgQuality() const {
     return imgQuality;
 }
 
-int ArgumentsParser::GetFrameRate() const {
+double ArgumentsParser::GetFrameRate() const {
     return frameRate;
 }
 

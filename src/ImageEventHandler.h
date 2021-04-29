@@ -65,7 +65,7 @@ public:
 
     void OpenLogFile();
 
-    void OpenVidOutput(unsigned int frameRate);
+    void OpenVidOutput(double frameRate);
 
     void PrintCameraState();
 

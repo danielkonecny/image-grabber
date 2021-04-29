@@ -4,7 +4,7 @@
  * @file            ImageEventHandler.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            29. 04. 2021
+ * @date            30. 04. 2021
  */
 
 #include <iostream>
@@ -107,7 +107,7 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         const double minLowerLimit = camera.AutoExposureTimeLowerLimit.GetMin();
         // Maximal exposure time computed from given frame rate with additional time for image handling.
         const double handlingTime = 5000.0; // 5 ms
-        const double maxUpperLimit = (1000000.0 / ((double) parser.GetFrameRate())) - handlingTime;
+        const double maxUpperLimit = (1000000.0 / parser.GetFrameRate()) - handlingTime;
         camera.AutoExposureTimeLowerLimit.SetValue(minLowerLimit);
         camera.AutoExposureTimeUpperLimit.SetValue(maxUpperLimit);
 
@@ -149,13 +149,9 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
         balanceWhiteRed = camera.BalanceRatio.GetValue();
     } else {
-        cout << "1" << endl;
         camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
-        cout << "2" << endl;
         camera.BlackLevel.SetValue(0);
-        cout << "3" << endl;
         camera.BalanceRatio.SetValue(balanceWhiteRed);
-        cout << "4" << endl;
     }
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Green);
@@ -223,7 +219,7 @@ void ImageEventHandler::OpenLogFile() {
             << R"("exposure_time","gain","white_balance_r","white_balance_g","white_balance_b")" << endl;
 }
 
-void ImageEventHandler::OpenVidOutput(unsigned int frameRate) {
+void ImageEventHandler::OpenVidOutput(double frameRate) {
     mode = "vid";
     string fileDatetimeString = NanosecondsToFileDatetime(timeGrabbingStarts);
     fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + "_" + mode + fileDatetimeString + ".avi";

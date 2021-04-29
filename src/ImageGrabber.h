@@ -4,7 +4,7 @@
  * @file            ImageGrabber.h
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            29. 04. 2021
+ * @date            30. 04. 2021
  */
 
 #include <iostream>
@@ -27,6 +27,8 @@ public:
     CBaslerUniversalInstantCameraArray cameras;
 
     explicit ImageGrabber(const ArgumentsParser &parser);
+
+    ~ImageGrabber();
 
     void ConfigureCamera(CBaslerUniversalInstantCamera &camera, const ArgumentsParser &parser, size_t index);
 
