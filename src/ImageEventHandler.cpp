@@ -138,33 +138,56 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
         camera.Gain.SetValue(gain);
     }
 
-    // Select auto function ROI 2
-    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
-    // Enable the Balance White Auto auto function
-    // for the auto function ROI selected
-    camera.AutoFunctionROIUseWhiteBalance.SetValue(true);
-    // Enable Balance White Auto by setting the operating mode to Continuous.
-    camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
-
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
     if (balanceWhiteRed == -1) {
+        // Select auto function ROI 2
+        camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
+        // Enable the Balance White Auto auto function
+        // for the auto function ROI selected
+        camera.AutoFunctionROIUseWhiteBalance.SetValue(true);
+        // Enable Balance White Auto by setting the operating mode to Continuous.
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
         balanceWhiteRed = camera.BalanceRatio.GetValue();
     } else {
-        camera.BalanceRatioAbs.SetValue(balanceWhiteRed);
+        cout << "1" << endl;
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+        cout << "2" << endl;
+        camera.BlackLevel.SetValue(0);
+        cout << "3" << endl;
+        camera.BalanceRatio.SetValue(balanceWhiteRed);
+        cout << "4" << endl;
     }
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Green);
     if (balanceWhiteGreen == -1) {
+        // Select auto function ROI 2
+        camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
+        // Enable the Balance White Auto auto function
+        // for the auto function ROI selected
+        camera.AutoFunctionROIUseWhiteBalance.SetValue(true);
+        // Enable Balance White Auto by setting the operating mode to Continuous.
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
         balanceWhiteGreen = camera.BalanceRatio.GetValue();
     } else {
-        camera.BalanceRatioAbs.SetValue(balanceWhiteGreen);
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+        camera.BlackLevel.SetValue(0);
+        camera.BalanceRatio.SetValue(balanceWhiteGreen);
     }
 
     camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Blue);
     if (balanceWhiteBlue == -1) {
+        // Select auto function ROI 2
+        camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
+        // Enable the Balance White Auto auto function
+        // for the auto function ROI selected
+        camera.AutoFunctionROIUseWhiteBalance.SetValue(true);
+        // Enable Balance White Auto by setting the operating mode to Continuous.
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Continuous);
         balanceWhiteBlue = camera.BalanceRatio.GetValue();
     } else {
-        camera.BalanceRatioAbs.SetValue(balanceWhiteBlue);
+        camera.BalanceWhiteAuto.SetValue(BalanceWhiteAuto_Off);
+        camera.BlackLevel.SetValue(0);
+        camera.BalanceRatio.SetValue(balanceWhiteBlue);
     }
 
     width = (int) (camera.Width.GetValue() - camera.OffsetX.GetValue());
