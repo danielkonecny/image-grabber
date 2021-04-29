@@ -270,6 +270,13 @@ void ImageEventHandler::OnImageGrabbed(CBaslerUniversalInstantCamera &camera,
         unsigned long long int timestamp = (chunkTimestamp + timeOffset) / 1000000;
         string datetimeString = NanosecondsToDatetime(timestamp);
 
+        camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Red);
+        balanceWhiteRed = camera.BalanceRatio.GetValue();
+        camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Green);
+        balanceWhiteGreen = camera.BalanceRatio.GetValue();
+        camera.BalanceRatioSelector.SetValue(BalanceRatioSelector_Blue);
+        balanceWhiteBlue = camera.BalanceRatio.GetValue();
+
         if (image) {
             string fileDatetimeString = NanosecondsToFileDatetime(timestamp);
             fileNameString = outDir + "/" + mode + "/cam" + cameraSerialNum + "_" + mode + fileDatetimeString + ".jpg";
