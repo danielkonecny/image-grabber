@@ -37,7 +37,7 @@ private:
 
     static void PrintHelp();
 
-    static long long LoadInteger(char *numberAsChars);
+    static long long int LoadInteger(char *numberAsChars);
 
     static double LoadDouble(char *numberAsChars);
 

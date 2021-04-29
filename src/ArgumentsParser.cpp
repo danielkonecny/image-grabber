@@ -15,7 +15,7 @@
 
 using namespace std;
 
-long long ArgumentsParser::LoadInteger(char *numberAsChars) {
+long long int ArgumentsParser::LoadInteger(char *numberAsChars) {
     string::size_type length;
     string numberAsString = numberAsChars;
     int numberAsInt;
@@ -166,7 +166,7 @@ bool ArgumentsParser::ProcessArguments(int argc, char *argv[]) {
 
             case 'f':
                 try {
-                    frameRate = (unsigned int) LoadInteger(optarg);
+                    frameRate = (int) LoadInteger(optarg);
                 }
                 catch (...) {
                     return false;

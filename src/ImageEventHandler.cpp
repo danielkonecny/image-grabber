@@ -81,13 +81,13 @@ void ImageEventHandler::SetCameraParams(CBaslerUniversalInstantCamera &camera, c
     camera.Width.SetToMaximum();
     camera.Height.SetToMaximum();
 
-    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI1 );
-    camera.AutoFunctionROIUseBrightness.TrySetValue( true );   // ROI 1 is used for brightness control
-    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI2 );
-    camera.AutoFunctionROIUseBrightness.TrySetValue( false );   // ROI 2 is not used for brightness control
+    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI1);
+    camera.AutoFunctionROIUseBrightness.TrySetValue(true);   // ROI 1 is used for brightness control
+    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI2);
+    camera.AutoFunctionROIUseBrightness.TrySetValue(false);   // ROI 2 is not used for brightness control
 
     // Set the ROI (in this example the complete sensor is used)
-    camera.AutoFunctionROISelector.SetValue( AutoFunctionROISelector_ROI1 );  // configure ROI 1
+    camera.AutoFunctionROISelector.SetValue(AutoFunctionROISelector_ROI1);  // configure ROI 1
     camera.AutoFunctionROIOffsetX.SetToMinimum();
     camera.AutoFunctionROIOffsetY.SetToMinimum();
     camera.AutoFunctionROIWidth.SetToMaximum();
