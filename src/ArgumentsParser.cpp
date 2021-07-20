@@ -4,7 +4,7 @@
  * @file            ArgumentsParser.cpp
  * @author          Daniel Konecny (xkonec75)
  * @organisation    Brno University of Technology - Faculty of Information Technologies
- * @date            30. 04. 2021
+ * @date            20. 07. 2021
  */
 
 
@@ -65,20 +65,26 @@ double ArgumentsParser::LoadDouble(char *numberAsChars) {
 
 void ArgumentsParser::PrintHelp() {
     cout << "IMAGE GRABBER" << endl <<
-         "-R (--bwr)        Set balance white (red channel), larger than 0 (default: auto continuous)." << endl <<
-         "                  (=1 red intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
-         "-G (--bwg)        Set balance white (green channel), larger than 0 (default: auto continuous)." << endl <<
-         "                  (=1 green intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
-         "-B (--bwb)        Set balance white (blue channel), larger than 0 (default: auto continuous)." << endl <<
-         "                  (=1 blue intensity unchanged, >1 intensity increased, <1 intensity decreased)." << endl <<
-         "-e (--exposure)   Set exposure time in microseconds, larger than 0 (default: auto continuous)." << endl <<
-         "-f (--framerate)  Set framerate (fps) of recording (default: " << DEFAULT_FRAME_RATE << ")." << endl <<
-         "-g (--gain)       Set gain, larger than 0, (default: auto continuous)." << endl <<
+         "-R (--bwr)        Balance white (red channel), larger than 0, double precision," << endl <<
+         "                  (default: auto continuous), (=1 red intensity unchanged, >1 increased, <1 decreased)."
+         << endl <<
+         "-G (--bwg)        Balance white (green channel), larger than 0, double precision," << endl <<
+         "                  (default: auto continuous), (=1 green intensity unchanged, >1 increased, <1 decreased)."
+         << endl <<
+         "-B (--bwb)        Balance white (blue channel), larger than 0, double precision," << endl <<
+         "                  (default: auto continuous), (=1 blue intensity unchanged, >1 increased, <1 decreased)."
+         << endl <<
+         "-e (--exposure)   Set exposure time in microseconds, range may vary, double precision," << endl <<
+         "                  (for example 28 - 1e7), (default: auto continuous)." << endl <<
+         "-f (--framerate)  Set framerate (fps) of recording, double precision, (default: " << DEFAULT_FRAME_RATE <<
+         ")." << endl <<
+         "-g (--gain)       Set gain, range may vary (for example 0 - 23.59), (default: auto continuous)." << endl <<
          "-h (--help)       Show help." << endl <<
          "-i (--image)      Save images instead of video." << endl <<
          "-o (--output)     Set folder for video/image and log output (default: " << DEFAULT_OUT_DIR << ")." << endl <<
-         "-q (--quality)    Set image quality between 0 and 100, the higher is the better (default: " <<
-         DEFAULT_IMG_QUALITY << ")." << endl <<
+         "-q (--quality)    Set image quality (use only together with `-i`) between 0 and 100," << endl <<
+         "                  the higher is the better, integer precision, (default: " << DEFAULT_IMG_QUALITY << ")."
+         << endl <<
          "-v (--verbose)    Print information about the camera state." << endl;
 }
 
